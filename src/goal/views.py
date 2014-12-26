@@ -20,7 +20,9 @@ def addGoal(request):
     if form.is_valid():
         email = form.cleaned_data['email']
         content = form.cleaned_data['content']
-        user = Account.addUser(email)
+        birthday = form.cleaned_data['birthday']
+        gender = form.cleaned_data['gender']
+        user = Account.addUser(email, birthday, gender)
         goal = Goal(
                 content = content,
                 ip = request.META.REMOTE_ADDR,
