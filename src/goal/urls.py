@@ -5,5 +5,6 @@ from goal import views
 
 urlpatterns = patterns('',
         url(r'^$', views.index),
-        url(r'^add$', views.addGoal),
+        url(r'^add/$', views.addGoal),
+        url(r'^count/$', views.countGoals),
 )

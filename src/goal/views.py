@@ -33,3 +33,8 @@ def addGoal(request):
     return render_to_response('json/simple_res.json',
             RequestContext(request, {'success': False, 'errs': form.errors.keys()}))
 
+@ensure_csrf_cookie
+def countGoals(request):
+    return render_to_response('json/number.json', 
+            RequestContext(request, {'success': True, 'num': Goal.objects.count()}))
+
