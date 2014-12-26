@@ -1,0 +1,6 @@
+({{% if success %}
+'success': true,
+{% else %}
+'success': false,
+'errs': [{% for e in errs %}'{{ e }}',{% endfor %}]
+{% endif %}})
