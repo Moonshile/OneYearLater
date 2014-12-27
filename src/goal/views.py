@@ -17,21 +17,21 @@ def addGoal(request):
         return render_to_response('json/simple_res.json', 
                 RequestContext(request, {'success': False, 'errs': ['post'], }))
     form = GoalForm(request.POST)
-    if form.is_valid():
-        email = form.cleaned_data['email']
-        content = form.cleaned_data['content']
-        birthday = form.cleaned_data['birthday']
-        gender = form.cleaned_data['gender']
-        user = Account.addUser(email, birthday, gender)
-        goal = Goal(
-                content = content,
-                ip = request.META.REMOTE_ADDR,
-                author = useri
-                )
-        goal.save()
-        return render_to_response('json/simple_res.json', RequestContext(request, {'success': True}))
-    return render_to_response('json/simple_res.json',
-            RequestContext(request, {'success': False, 'errs': form.errors.keys()}))
+    if not form.is_valid():
+        return render_to_response('json/simple_res.json',
+                RequestContext(request, {'success': False, 'errs': form.errors.keys()}))
+    email = form.cleaned_data['email']
+    content = form.cleaned_data['content']
+    birthday = form.cleaned_data['birthday']
+    gender = form.cleaned_data['gender']
+    user = Account.addUser(email, birthday, gender)
+    goal = Goal(
+            content = content,
+            ip = request.META.REMOTE_ADDR,
+            author = useri,
+            )
+    goal.save()
+    return render_to_response('json/simple_res.json', RequestContext(request, {'success': True}))
 
 @ensure_csrf_cookie
 def countGoals(request):
