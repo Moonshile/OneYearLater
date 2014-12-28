@@ -7,23 +7,18 @@ from django.contrib.auth.models import User
 from goal.forms import GoalForm
 from account.models import Account
 
-def addUser(uname, pwd, email, birthday = None, gender = None):
+def addUser(username, pwd='', email=None, age = None, gender=None):
     user = User.objects.create_user(
-            username = uname,
+            username = username,
             password = pwd,
-            email = email,
+            email = username if email is None else email,
             )
     user.save()
     account = Account(
             owner = user,
-            birthday = birthday,
+            age = age,
             gender = gender,
             )
     return user
 
-def addUser(pwd, email, birthday = None, gender = None):
-    return addUser(email, pwd, email, birthday, gender)
-
-def addUser(email, birthday = None, gender = None):
-    return addUser(email, '', email, birthday, gender)
 
