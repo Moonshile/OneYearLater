@@ -1,0 +1,30 @@
+
+.fixed-form {
+  position: fixed;
+  z-index: 100;
+  background-color: rgba(239,239,239,.6);
+  border: 1px solid #f8f8f8;
+  border-radius: 10px;
+}
+
+.optional {
+  margin-bottom: 15px;
+}
+
+.optional-header {
+  cursor: default;
+}
+
+.optional-body {
+  display: none;
+  padding: 10px 50px 5px 50px;
+  border: 1px dotted #888;
+  border-top: none;
+}
+
+.text-back {
+  padding: 15px;
+  background-color: rgba(239,239,239,.3);
+  border: 1px solid rgba(239,239,239,.35);
+  border-radius: 5px;
+}
