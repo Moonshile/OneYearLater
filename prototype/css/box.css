@@ -1,6 +1,5 @@
 
-.fixed-form {
-  position: fixed;
+.white-form {
   z-index: 100;
   background-color: rgba(239,239,239,.6);
   border: 1px solid #f8f8f8;
@@ -28,3 +27,19 @@
   border: 1px solid rgba(239,239,239,.35);
   border-radius: 5px;
 }
+
+.curtain {
+  padding-left: 10%;
+  width: 100%;
+}
+
+.curtain h1 {
+  font-size: 63px;
+  line-height: 1.1;
+}
+
+.curtain p {
+  font-size: 21px;
+  line-height: 1.4;
+}
+

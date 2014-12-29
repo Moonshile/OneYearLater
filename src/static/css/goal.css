@@ -26,24 +26,21 @@
   background-color: #cff;
 }
 
-.jumbotron {
-  padding-bottom: 0;
-}
-
 .caret {
   transform: rotate(-90deg);
   transition-duration: .5s;
 }
 
-.fixed-form {
-  top: 15%;
-  right: 10%;
+.white-form {
+  margin-top: 15%;
+  margin-left: 10%;
   padding: 35px 55px 35px 55px;
   width: 80%;
 }
 
 @media screen and (min-width: 768px) {
-  .fixed-form {
+  .white-form {
+    position: fixed;
     right: 10%;
     width: 40%;
     max-width: 399px;
@@ -51,7 +48,8 @@
 }
 
 @media screen and (min-width: 992px) {
-  .fixed-form {
+  .white-form {
+    position: fixed;
     right: 20%;
     width: 30%;
     min-width: 399px;
@@ -60,7 +58,7 @@
 }
 
 .text-back {
-  width: 390px;
+  width: 30%;
 }
 
 .optional-body .form-group {
