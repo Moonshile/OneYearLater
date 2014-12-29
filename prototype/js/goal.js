@@ -23,6 +23,7 @@ $(document).ready(function(){
     });
     
     $("#submit").click(function(){
+        removeFormStates();
         var a = parseInt(document.getElementById("age").value);
         var g = document.getElementById("gender");
         $.ajax({
@@ -37,20 +38,31 @@ $(document).ready(function(){
             success: function(data) {
                 d = eval(data);
                 if(d.success) {
-                    //todo
-                    $(".alert").slideUp();
+                    $(".alert").html("已经下定决心,赶紧行动吧!").removeClass("alert-danger").addClass("alert-success");
+                    if($(".alert").is(":hidden")) {
+                        $(".alert").slideDown("fast");
+                    }
+                    $("#submit").attr("disabled", "true");
                 } else {
                     var errInfo = {
                         "content": "内容应在1~1000个字符之间", 
-                        "email": "需要正确格式的邮件地址",
+                        "email": "邮件地址需格式正确",
                         "age": "年龄应不大于128岁",
                         "gender": "亲，不要乱尝试性别哦"
                     };
                     var msg = "";
                     for(e in d.errs) {
-                        msg += errInfo[d.errs[e]] + "~";
+                        msg += errInfo[d.errs[e]] + "; ";
+                        addDanger(d.errs[e]);
                     }
-                    $(".alert").html(msg).slideDown("fast");
+                    if(!checkNumber("age") && d.errs.indexOf("age") == -1) {
+                        msg += errInfo["age"] + "; ";
+                        addDanger("age");
+                    }
+                    $(".alert").html(msg).removeClass("alert-success").addClass("alert-danger");
+                    if($(".alert").is(":hidden")) {
+                        $(".alert").slideDown("fast");
+                    }
                 }
             }
         });
