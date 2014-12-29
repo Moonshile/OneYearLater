@@ -33,6 +33,12 @@
   width: 100%;
 }
 
+@media screen and (min-width: 992px) {
+  .curtain {
+    padding-left: 15%;
+  }
+}
+
 @media screen and (min-width: 1280px) {
   .curtain {
     padding-left: 20%;
