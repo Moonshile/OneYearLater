@@ -1,9 +1,4 @@
-/**
- * 段凯强
- * 2013/12/19
- * (c) 月采
- * 在没有获得许可的情况下，你不被允许使用此文件
- */
+
 $(document).ready(function(){
     (function(){
 		function getCookie(name) {

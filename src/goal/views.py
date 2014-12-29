@@ -10,7 +10,7 @@ from account import views as Account
 from datetime import date, timedelta
 
 def index(request):
-    return render_to_response('goal.html', RequestContext(request))
+    return render_to_response('goal.html')
 
 @ensure_csrf_cookie
 def addGoal(request):
@@ -19,7 +19,6 @@ def addGoal(request):
                 RequestContext(request, {'success': False, 'errs': ['post'], }))
     form = GoalForm(request.POST)
     if not form.is_valid():
-        print form.errors.as_json()
         return render_to_response('json/simple_res.json',
                 RequestContext(request, {'success': False, 'errs': form.errors.keys()}))
     email = form.cleaned_data['email']
