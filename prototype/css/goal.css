@@ -47,7 +47,7 @@
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1280px) {
   .white-form {
     position: fixed;
     right: 20%;
@@ -59,6 +59,12 @@
 
 .text-back {
   width: 30%;
+}
+
+@media screen and (min-width: 1280px) {
+  .text-back {
+    width: 25%;
+  }
 }
 
 .optional-body .form-group {
