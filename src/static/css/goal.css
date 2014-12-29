@@ -15,7 +15,8 @@
 .fall {
   min-height: 500px;
   padding-top: 250px;
-  background-image: url(../img/fall.jpg);
+  background: url(../img/fall.jpg) no-repeat center center fixed;
+  background-size: cover;
   background-color: #fc8;
 }
 
@@ -36,6 +37,7 @@
   margin-left: 10%;
   padding: 35px 55px 35px 55px;
   width: 80%;
+  transition-duration: .5s;
 }
 
 @media screen and (min-width: 768px) {
@@ -78,8 +80,8 @@
 }
 
 body {
-  background-image: url(../img/spring.jpg);
-  background-attachment: fixed;
+  background: url(../img/spring.jpg) no-repeat center center fixed;
+  background-size: cover;
 }
 
 h1 {

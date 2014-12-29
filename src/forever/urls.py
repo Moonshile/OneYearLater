@@ -4,10 +4,10 @@ admin.autodiscover()
 
 from django.conf.urls.static import static
 
+from forever import views
+
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'forever.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
+    url(r'^$', views.index),
 
     # goal
     url(r'^goal/', include('goal.urls')),

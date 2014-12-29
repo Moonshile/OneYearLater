@@ -37,12 +37,9 @@ $(document).ready(function(){
             },
             success: function(data) {
                 d = eval(data);
-                if(d.success) {
-                    $(".alert").html("已经下定决心,赶紧行动吧!").removeClass("alert-danger").addClass("alert-success");
-                    if($(".alert").is(":hidden")) {
-                        $(".alert").slideDown("fast");
-                    }
-                    $("#submit").attr("disabled", "true");
+                if(!d.success) {
+                    $(".white-form").css("transform", "rotateY(90deg) scale(.8,0.8)");
+                    setTimeout('$(".white-form").html($(".submit-success").html()).css("transform", "rotateY(0deg) scale(1,1)")', 500);
                 } else {
                     var errInfo = {
                         "content": "内容应在1~1000个字符之间", 
@@ -52,11 +49,11 @@ $(document).ready(function(){
                     };
                     var msg = "";
                     for(e in d.errs) {
-                        msg += errInfo[d.errs[e]] + "; ";
+                        msg += errInfo[d.errs[e]] + "； ";
                         addDanger(d.errs[e]);
                     }
                     if(!checkNumber("age") && d.errs.indexOf("age") == -1) {
-                        msg += errInfo["age"] + "; ";
+                        msg += errInfo["age"] + "； ";
                         addDanger("age");
                     }
                     $(".alert").html(msg).removeClass("alert-success").addClass("alert-danger");
