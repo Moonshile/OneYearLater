@@ -9,18 +9,18 @@ from goal.models import Goal
 from account import views as Account
 from datetime import date, timedelta
 
+@ensure_csrf_cookie
 def index(request):
     return render_to_response('goal.html')
 
-@ensure_csrf_cookie
 def addGoal(request):
     if request.method != 'POST':
         return render_to_response('json/simple_res.json', 
-                RequestContext(request, {'success': False, 'errs': ['post'], }))
+                {'success': False, 'errs': ['post'], })
     form = GoalForm(request.POST)
     if not form.is_valid():
         return render_to_response('json/simple_res.json',
-                RequestContext(request, {'success': False, 'errs': form.errors.keys()}))
+                {'success': False, 'errs': form.errors.keys()})
     email = form.cleaned_data['email']
     content = form.cleaned_data['content']
     age = form.cleaned_data['age']
@@ -40,10 +40,9 @@ def addGoal(request):
             author = user,
             )
     goal.save()
-    return render_to_response('json/simple_res.json', RequestContext(request, {'success': True}))
+    return render_to_response('json/simple_res.json', {'success': True})
 
-@ensure_csrf_cookie
 def countGoals(request):
     return render_to_response('json/number.json', 
-            RequestContext(request, {'success': True, 'num': Goal.objects.count()}))
+            {'success': True, 'num': Goal.objects.count()})
 
