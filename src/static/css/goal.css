@@ -43,6 +43,7 @@
 @media screen and (min-width: 768px) {
   .white-form {
     position: fixed;
+    margin-top: 5%;
     right: 10%;
     width: 40%;
     max-width: 399px;
@@ -52,6 +53,7 @@
 @media screen and (min-width: 992px) {
   .white-form {
     position: fixed;
+    margin-top: 10%;
     right: 15%;
     width: 30%;
     min-width: 399px;
@@ -61,6 +63,7 @@
 
 @media screen and (min-width: 1280px) {
   .white-form {
+    margin-top: 15%;
     right: 20%;
   }
 }

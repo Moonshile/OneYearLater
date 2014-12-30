@@ -8,6 +8,13 @@ $(document).ready(function(){
         } else {
             $(".optional-body").append("<input id='gender' name='gender' type='checkbox' " + (gender ? "checked" : "" ) + " hidden>");
         }
+        if(gender) {
+            $("#f").addClass("btn-info");
+            $("#m").removeClass("btn-info");
+        } else {
+            $("#m").addClass("btn-info");
+            $("#f").removeClass("btn-info");
+        }
     }
     
     var ch1 = "填写你对自己未来一年的要求，我将在明年第一天发邮件提醒你。可以考虑的方面：\n";

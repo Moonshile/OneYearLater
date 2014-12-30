@@ -67,6 +67,8 @@ DATABASES = {
         'NAME': 'forever',
         'USER': 'root',
         'PASSWORD': '643512',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -99,6 +101,16 @@ STATIC_ROOT = '/var/www/forever/static/'
 STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
         )
+
 # admins
 
+DOMAIN_NAME = 'www.goondream.com'
+
+ADMINS = (
+        ('exname', 'someone@ex.com'),
+        )
+
+MANAGERS = (
+        ('exname', 'someone@ex.com'),
+        )
 
