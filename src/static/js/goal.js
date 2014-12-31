@@ -17,7 +17,7 @@ $(document).ready(function(){
         }
     }
     
-    var ch1 = "填写你对自己未来一年的要求，我将在2016年1月1日发邮件提醒你，看看这一年多梦想是否实现。可以考虑的方面：";
+    var ch1 = "填写你对自己未来一年的要求，我将在2016年1月1日发邮件提醒你，看看这一年的梦想是否实现。可以考虑的方面：";
     var ch2 = "经济 学习 健康 ";
     $("#content").attr("placeholder", ch1 + ch2).focus(function(){
         $("#content").html(ch2.replace(/\s+/g, "：\n"));
