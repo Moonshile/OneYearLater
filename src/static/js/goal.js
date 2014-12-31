@@ -46,7 +46,11 @@ $(document).ready(function(){
                 d = eval(data);
                 if(!d.success) {
                     $(".white-form").css("transform", "rotateY(90deg) scale(.8,0.8)");
-                    setTimeout('$(".white-form").html($(".submit-success").html()).css("transform", "rotateY(0deg) scale(1,1)")', 500);
+                    setTimeout('\
+                        $(".before-submit").hide();\
+                        $(".submit-success").removeClass("hidden");\
+                        $(".white-form").css("transform", "rotateY(0deg) scale(1,1)")\
+                    ', 500);
                 } else {
                     var errInfo = {
                         "content": "内容应在1~1000个字符之间", 
