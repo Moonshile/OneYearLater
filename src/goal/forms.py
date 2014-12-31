@@ -18,7 +18,7 @@ class GoalForm(forms.Form):
 
     def clean_age(self):
         age = self.cleaned_data['age']
-        if age is None or age < const.OLDEST and age > 0:
+        if age is None or age <= const.OLDEST and age >= 0:
             return age
         raise forms.ValidationError('age')
 

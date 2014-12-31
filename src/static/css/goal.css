@@ -33,7 +33,7 @@
 }
 
 .white-form {
-  margin-top: 15%;
+  margin-top: 5%;
   margin-left: 10%;
   padding: 35px 55px 35px 55px;
   width: 80%;
@@ -43,7 +43,6 @@
 @media screen and (min-width: 768px) {
   .white-form {
     position: fixed;
-    margin-top: 5%;
     right: 10%;
     width: 40%;
     max-width: 399px;
@@ -53,7 +52,6 @@
 @media screen and (min-width: 992px) {
   .white-form {
     position: fixed;
-    margin-top: 10%;
     right: 15%;
     width: 30%;
     min-width: 399px;
@@ -63,10 +61,24 @@
 
 @media screen and (min-width: 1280px) {
   .white-form {
-    margin-top: 15%;
     right: 20%;
   }
 }
+
+@media screen and (min-height: 625px) {
+  .white-form {
+    position: fixed;
+    margin-top: 10%;
+  }
+}
+
+@media screen and (min-height: 715px) {
+  .white-form {
+    position: fixed;
+    margin-top: 15%;
+  }
+}
+
 
 .text-back {
   width: 30%;
@@ -84,7 +96,6 @@
 
 body {
   background: url(../img/spring.jpg) no-repeat center center fixed;
-  background-size: cover;
 }
 
 h1 {
@@ -94,5 +105,6 @@ h1 {
 
 p {
   font-family: 楷体;
+  font-size: 21px;
   color: #333;
 }

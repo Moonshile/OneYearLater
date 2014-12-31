@@ -17,10 +17,10 @@ $(document).ready(function(){
         }
     }
     
-    var ch1 = "填写你对自己未来一年的要求，我将在明年第一天发邮件提醒你。可以考虑的方面：\n";
-    var ch2 = "经济：\n学习：\n健康：";
+    var ch1 = "填写你对自己未来一年的要求，我将在2016年1月1日发邮件提醒你，看看这一年多梦想是否实现。可以考虑的方面：";
+    var ch2 = "经济 学习 健康 ";
     $("#content").attr("placeholder", ch1 + ch2).focus(function(){
-        $("#content").html(ch2);
+        $("#content").html(ch2.replace(/\s+/g, "：\n"));
     });
     $("#m").click(function() {
         appendGender(false);
