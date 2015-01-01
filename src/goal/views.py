@@ -40,7 +40,7 @@ def addGoal(request):
             author = user,
             )
     goal.save()
-    return render_to_response('json/simple_res.json', {'success': True})
+    return render_to_response('json/simple_res.json', {'success': True, 'data': user.id})
 
 def countGoals(request):
     return render_to_response('json/number.json', 

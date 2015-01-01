@@ -44,9 +44,10 @@ $(document).ready(function(){
             },
             success: function(data) {
                 d = eval(data);
-                if(!d.success) {
+                if(d.success) {
                     $(".white-form").css("transform", "rotateY(90deg) scale(.8,0.8)");
                     setTimeout('\
+                        $(".goal-id").html(d.data);\
                         $(".before-submit").hide();\
                         $(".submit-success").removeClass("hidden");\
                         $(".white-form").css("transform", "rotateY(0deg) scale(1,1)")\

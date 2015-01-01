@@ -2,5 +2,7 @@
 'success':true,
 {% else %}
 'success':false,
-'errs':[{% for e in errs %}'{{ e }}',{% endfor %}]
-{% endif %}})
+'errs':[{% for e in errs %}'{{ e }}',{% endfor %}],
+{% endif %}
+{% if data %}'data': {{ data }},{% endif %}
+})
