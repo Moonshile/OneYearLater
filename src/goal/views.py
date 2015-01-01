@@ -41,8 +41,10 @@ def addGoal(request):
                 gender = gender,
                 )
         else:
-            user.account.age = age
-            user.account.gender = gender
+            if age:
+                user.account.age = age
+            if gender:
+                user.account.gender = gender
             user.account.save()
     goal = Goal(
             content = content,
