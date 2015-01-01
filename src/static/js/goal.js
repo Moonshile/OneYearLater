@@ -2,12 +2,7 @@
 $(document).ready(function(){
     
     function appendGender(gender) {
-        var g = document.getElementById("gender");
-        if(g) {
-            g.checked = gender;
-        } else {
-            $(".optional-body").append("<input id='gender' name='gender' type='checkbox' " + (gender ? "checked" : "" ) + " hidden>");
-        }
+        document.getElementById("gender").value = gender ? "2" : "3";
         if(gender) {
             $("#f").addClass("btn-info");
             $("#m").removeClass("btn-info");
@@ -32,7 +27,6 @@ $(document).ready(function(){
     $("#submit").click(function(){
         removeFormStates();
         var a = parseInt(document.getElementById("age").value);
-        var g = document.getElementById("gender");
         $.ajax({
             url: "add/",
             type: "POST",
@@ -40,7 +34,7 @@ $(document).ready(function(){
                 "content": document.getElementById("content").value,
                 "email": document.getElementById("email").value,
                 "age": (isNaN(a) ? null : a),
-                "gender": (g ? g.checked : null)
+                "gender": document.getElementById("gender").value,
             },
             success: function(data) {
                 d = eval(data);

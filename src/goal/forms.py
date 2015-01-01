@@ -7,7 +7,7 @@ class GoalForm(forms.Form):
     content = forms.CharField()
     email = forms.EmailField()
     age = forms.IntegerField(required=False)
-    gender = forms.NullBooleanField(required=False)
+    gender = forms.NullBooleanField()
 
     def clean_content(self):
         content = self.cleaned_data['content']

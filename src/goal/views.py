@@ -34,14 +34,16 @@ def addGoal(request):
                 )
     else:
         user = user[0]
-        print 1
         if not hasattr(user, 'account'):
-            print 2
             Account.addAccount(
                 owner = user,
                 age = age,
                 gender = gender,
                 )
+        else:
+            user.account.age = age
+            user.account.gender = gender
+            user.account.save()
     goal = Goal(
             content = content,
             ip = request.META['REMOTE_ADDR'],
