@@ -39,7 +39,8 @@ $(document).ready(function(){
             success: function(data) {
                 d = eval(data);
                 if(d.success) {
-                    jiathis_config.url += '?from=' + document.getElementById("email").value
+                    jiathis_config.url += "?from=" + document.getElementById("email").value;
+                    jiathis_config.summary += "我的决心编号：" + d.data;
                     $(".white-form").css("transform", "rotateY(90deg) scale(.8,0.8)");
                     setTimeout(function() {
                         $(".goal-id").html(d.data);
