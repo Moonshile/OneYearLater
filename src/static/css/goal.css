@@ -9,6 +9,7 @@
   min-height: 500px;
   padding-top: 100px;
   background-image: url(../img/summer.jpg);
+  background-size: cover;
   background-color: #8d8;
 }
 
@@ -24,6 +25,7 @@
   min-height: 500px;
   padding-top: 200px;
   background-image: url(../img/winter.jpg);
+  background-size: cover;
   background-color: #cff;
 }
 
