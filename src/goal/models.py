@@ -14,3 +14,5 @@ class Goal(models.Model):
     def __unicode__(self):
         return self.author.username + '\'s goal: ' + self.content[0:10]
 
+class ErrorInfo(models.Model):
+    content = models.TextField()

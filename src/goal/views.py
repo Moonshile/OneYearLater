@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.models import User
 from goal.forms import GoalForm
-from goal.models import Goal
+from goal.models import Goal, ErrorInfo
 from account import views as Account
 from datetime import date, timedelta
 
@@ -19,6 +19,7 @@ def addGoal(request):
                 {'success': False, 'errs': ['post'], })
     form = GoalForm(request.POST)
     if not form.is_valid():
+        ErrorInfo(content=request.POST.urlencode()).save()
         return render_to_response('json/simple_res.json',
                 {'success': False, 'errs': form.errors.keys()})
     email = form.cleaned_data['email']
