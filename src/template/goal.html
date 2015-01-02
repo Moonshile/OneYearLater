@@ -19,11 +19,12 @@
   <body>
     <form class="form-horizontal white-form" role="form">
       <div class="before-submit">
+        <div class="form-group"><span> 写下你的梦想，我将于2016年1月1日提醒你</span></div>
         <div class="form-group">
-          <textarea class="form-control input-lg" id="content" name="content" rows="6"></textarea>
+          <textarea class="form-control" id="content" name="content" rows="4"></textarea>
         </div>
         <div class="form-group">
-          <input class="form-control input-lg" id="email" name="email" type="email" placeholder="邮箱地址">
+          <input class="form-control" id="email" name="email" type="email" placeholder="邮箱地址">
         </div>
         <div class="optional">
           <div class="form-group optional-header text-muted">
@@ -32,27 +33,30 @@
           </div>
           <div class="optional-body">
             <div class="form-group">
-              <input class="form-control" id="age" name="age" type="number" min="0" max="128" placeholder="年龄">
+              <input class="form-control input-sm" id="age" name="age" type="number" min="0" max="128" placeholder="年龄">
             </div>
             <div class="form-group">
               <label class="text-muted">性别</label>
               <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default" id="m"><input type="radio">男</label>
-                <label class="btn btn-default" id="f"><input type="radio">女</label>
+                <label class="btn btn-default btn-sm" id="m"><input type="radio">男</label>
+                <label class="btn btn-default btn-sm" id="f"><input type="radio">女</label>
               </div>
               <input id="gender" name="gender" value="1" hidden>
             </div>
           </div>
         </div>
         <input class="btn btn-lg btn-primary full-width" id="submit" type="button" value="下定决心">
+        <div class="form-group goal-no">
+          马上发布2015年第<span class="number"> {{ no }} </span>号决心吧！
+        </div>
         <div class="alert alert-danger" role="alert">
         </div>
       </div>
       <div class="submit-success hidden">
-        <p>你是新年第<span class="number goal-id"></span>号下定决心者!</p>
+        <p>2015年第<span class="number goal-id"></span>号决心出世!</p>
         <p>2016年1月1日，你将会收到我送出的提醒邮件。</p>
-        <p>一年的时间很长，却会稍纵即逝，让我们一起努力，等那一天来临时，不让自己失望。</p>
-        <p>共勉！</p>
+        <p>不忘初心，方得始终。与君共勉！</p>
+        <p>分享给朋友，大家一起努力～</p>
         <!-- JiaThis Button BEGIN -->
         <div class="jiathis_style_32x32 pull-right">
           <a class="jiathis_button_qzone"></a>
@@ -60,13 +64,13 @@
           <a class="jiathis_button_weixin"></a>
         </div>
         <script type="text/javascript" >
-        var jiathis_config={
-	        data_track_clickback:true,
-	        url:"http://www.goondream.com/goal/",
-	        summary:"我给自己定下了目标，这一年，不荒废！",
-	        title:"壹·年·后 #壹年后#",
-	        shortUrl:false,
-	        hideMore:true
+        var jiathis_config = {
+	        data_track_clickback: true,
+	        url: "http://www.goondream.com/goal/",
+	        summary: "我给自己定下了目标，这一年，不荒废！",
+	        title: "壹·年·后 #壹年后#",
+	        shortUrl: false,
+	        hideMore: true
         }
         </script>
         <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1998922" charset="utf-8"></script>

@@ -12,7 +12,7 @@ $(document).ready(function(){
         }
     }
     
-    var ch1 = "填写你对自己未来一年的要求，我将在2016年1月1日发邮件提醒你，看看这一年的梦想是否实现。可以考虑的方面：";
+    var ch1 = "一定是一年内能实现的具体目标，可以考虑：";
     var ch2 = "经济 学习 健康 ";
     $("#content").attr("placeholder", ch1 + ch2).focus(function(){
         $("#content").html(ch2.replace(/\s+/g, "：\n"));
@@ -39,13 +39,14 @@ $(document).ready(function(){
             success: function(data) {
                 d = eval(data);
                 if(d.success) {
+                    jiathis_config.url += '?from=' + document.getElementById("email").value
                     $(".white-form").css("transform", "rotateY(90deg) scale(.8,0.8)");
-                    setTimeout('\
-                        $(".goal-id").html(d.data);\
-                        $(".before-submit").hide();\
-                        $(".submit-success").removeClass("hidden");\
-                        $(".white-form").css("transform", "rotateY(0deg) scale(1,1)")\
-                    ', 500);
+                    setTimeout(function() {
+                        $(".goal-id").html(d.data);
+                        $(".before-submit").hide();
+                        $(".submit-success").removeClass("hidden");
+                        $(".white-form").css("transform", "rotateY(0deg) scale(1,1)")
+                    }, 500);
                 } else {
                     var errInfo = {
                         "content": "内容应在1~1000个字符之间", 
@@ -70,4 +71,25 @@ $(document).ready(function(){
             }
         });
     });
+    
+    setInterval(function() {
+        $.ajax({
+            url: 'count/',
+            type: 'GET',
+            success: function(data) {
+                d = eval(data);
+                if(d.success) {
+                    old = parseInt($(".goal-no .number").html());
+                    timer = setInterval(function() {
+                        if(old <= d.num) {
+                            old++;
+                            $(".goal-no .number").html(' ' + old + ' ');
+                        } else {
+                            clearInterval(timer);
+                        }
+                    }, 100);
+                }
+            }
+        });
+    }, 10000);
 });

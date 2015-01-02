@@ -11,7 +11,8 @@ from datetime import date, timedelta
 
 @ensure_csrf_cookie
 def index(request):
-    return render_to_response('goal.html')
+    return render_to_response('goal.html', 
+            RequestContext(request, {'no': 1 if Goal.objects.count() == 0 else Goal.objects.all()[0].no + 1}))
 
 def addGoal(request):
     if request.method != 'POST':
@@ -53,9 +54,11 @@ def addGoal(request):
             author = user,
             )
     goal.save()
-    return render_to_response('json/simple_res.json', {'success': True, 'data': user.id})
+    goal.no = goal.trick()
+    goal.save()
+    return render_to_response('json/simple_res.json', {'success': True, 'data': goal.no})
 
 def countGoals(request):
     return render_to_response('json/number.json', 
-            {'success': True, 'num': Goal.objects.count()})
+            {'success': True, 'num': 0 if Goal.objects.count() == 0 else Goal.objects.all()[0].no})
 

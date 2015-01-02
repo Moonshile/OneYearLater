@@ -35,7 +35,7 @@
 .white-form {
   margin-top: 5%;
   margin-left: 10%;
-  padding: 35px 55px 35px 55px;
+  padding: 25px 55px 20px 55px;
   width: 80%;
   transition-duration: .5s;
 }
@@ -82,6 +82,15 @@
 
 .text-back {
   width: 30%;
+}
+
+.goal-no {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.goal-no .number {
+  font-size: 21px;
 }
 
 @media screen and (min-width: 1280px) {
