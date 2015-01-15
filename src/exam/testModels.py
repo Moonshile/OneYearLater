@@ -31,17 +31,29 @@ class AnswerSheetMethodTest(TestCase):
 class TagMethodTest(TestCase):
 
     def setUp(self):
-        category = Category.objects.create(name='Programmer')
-        tagc = Tag.objects.create(name='C', category=category)
-        tagc.question_set.add(Question(content='Is #include a macro?'))
-        tagc.question_set.add(Question(content='Is main() necessary?'))
-        tagc.question_set.add(Question(content='What does (*c)(const void *) means?', level=3))
+        self.data = [{
+            'name': 'Programmer',
+            'tags': [{
+                'name': 'C', 
+                'questions': [
+                    {'content': 'Is #include a macro?', 'level': 0},
+                    {'content': 'Is main() necessary?', 'level': 0},
+                    {'content': 'What does (*c)(const void *) means?', 'level': 3},
+                ]
+            },]
+        },]
+        for c in self.data:
+            category = Category.objects.create(name=c['name'])
+            for t in c['tags']:
+                tag = Tag.objects.create(name=t['name'], category=category)
+                for q in t['questions']:
+                    tag.question_set.add(Question(content=q['content'], level=q['level']))
 
     """
     question_distribution should return a correct result
     """
     def test_question_distribution_correct(self):
-        expect = {0: 2, 3: 1}
-        actual = Tag.objects.get(name='C').question_distribution()
+        expect = {'l0': 2, 'l3': 1}
+        actual = Tag.objects.get(name='C').questionDistribution()
         self.assertEqual(expect, actual)
 

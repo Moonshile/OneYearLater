@@ -3,9 +3,11 @@ from django.db import models
 from django.contrib.auth.models import User
 import random
 
+from forever import const
+
 # classify tags to their categories, for example, 'Programmer', 'Gaokao'
 class Category(models.Model):
-    name = models.TextField()
+    name = models.CharField(max_length=const.CHAR_MID, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -13,7 +15,7 @@ class Category(models.Model):
 # classify the questions, for example, 'C', 'java', 'math', 'history'
 class Tag(models.Model):
     category = models.ForeignKey(Category)
-    name = models.TextField()
+    name = models.CharField(max_length=const.CHAR_MID, unique=True)
 
     def __unicode__(self):
         return self.name + 'in' + self.category.name
@@ -21,13 +23,14 @@ class Tag(models.Model):
     """
     returns the distribution of each hard-level of questions in this tag
     """
-    def question_distribution(self):
+    def questionDistribution(self):
         dist = {}
         for q in self.question_set.all():
-            if dist.has_key(q.level):
-                dist[q.level] += 1
+            key = u'l%d' % q.level
+            if dist.has_key(key):
+                dist[key] += 1
             else:
-                dist[q.level] = 1
+                dist[key] = 1
         return dist
 
 # only choice questions
@@ -53,10 +56,9 @@ class AnswerSheet(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     # skill experience of this user, smaller is inexperienced
     experience = models.SmallIntegerField(default=0)
+    # score, is read only, so could be saved into db
+    score = models.PositiveIntegerField(default=0)
     
-    class Meta:
-        ordering = ['-time']
-
     def generateToken(self):
         self.token = hex(self.id + 10000000)[2:]
         self.save()
