@@ -6,13 +6,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 import random, string
 
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
+from exam.viewFuncs import getCachedCategory, genQtoken
 from forever.const import err, RAND_STR_BASE
 
 def index(request):
     pass
-
-def genQtoken():
-    return string.join(random.sample(RAND_STR_BASE, 6)).replace(' ' , '')
 
 def getTags(request):
     # TODO deal with cache

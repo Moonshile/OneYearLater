@@ -2,6 +2,7 @@
 from django.test import TestCase
 
 from exam.models import AnswerSheet, Category, Tag, Question
+from exam.tests import commonSetUp
 
 """
 Creates an answer sheet with no user and has a token generated
@@ -31,23 +32,7 @@ class AnswerSheetMethodTest(TestCase):
 class TagMethodTest(TestCase):
 
     def setUp(self):
-        self.data = [{
-            'name': 'Programmer',
-            'tags': [{
-                'name': 'C', 
-                'questions': [
-                    {'content': 'Is #include a macro?', 'level': 0},
-                    {'content': 'Is main() necessary?', 'level': 0},
-                    {'content': 'What does (*c)(const void *) means?', 'level': 3},
-                ]
-            },]
-        },]
-        for c in self.data:
-            category = Category.objects.create(name=c['name'])
-            for t in c['tags']:
-                tag = Tag.objects.create(name=t['name'], category=category)
-                for q in t['questions']:
-                    tag.question_set.add(Question(content=q['content'], level=q['level']))
+        self.data = commonSetUp()
 
     """
     question_distribution should return a correct result

@@ -22,10 +22,13 @@ class GetTagsTests(TestCase):
         },]
         for c in self.data:
             category = Category.objects.create(name=c['name'])
+            c['id'] = category.id
             for t in c['tags']:
                 tag = Tag.objects.create(name=t['name'], category=category)
+                t['id'] = tag.id
                 for q in t['questions']:
-                    tag.question_set.add(Question(content=q['content'], level=q['level']))
+                    question = Question.objects.create(content=q['content'], level=q['level'], tag=tag)
+                    q['id'] = question.id
 
     """
     The request for get exist tags should return correct results
