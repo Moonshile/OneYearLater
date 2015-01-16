@@ -1,34 +1,17 @@
 
 from django.test import TestCase, RequestFactory
 from django.core.urlresolvers import reverse
+from django.http import JsonResponse
 
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from exam.views import getTags, getQuestions, handInAnswer, finishAnswer
+from exam.tests import commonSetUp
 from forever.const import err
 
 class GetTagsTests(TestCase):
 
     def setUp(self):
-        self.data = [{
-            'name': 'Programmer',
-            'tags': [{
-                'name': 'C', 
-                'questions': [
-                    {'content': 'Is #include a macro?', 'level': 0},
-                    {'content': 'Is main() necessary?', 'level': 0},
-                    {'content': 'What does (*c)(const void *) means?', 'level': 3},
-                ]
-            },]
-        },]
-        for c in self.data:
-            category = Category.objects.create(name=c['name'])
-            c['id'] = category.id
-            for t in c['tags']:
-                tag = Tag.objects.create(name=t['name'], category=category)
-                t['id'] = tag.id
-                for q in t['questions']:
-                    question = Question.objects.create(content=q['content'], level=q['level'], tag=tag)
-                    q['id'] = question.id
+        self.data = commonSetUp()
 
     """
     The request for get exist tags should return correct results
@@ -36,12 +19,16 @@ class GetTagsTests(TestCase):
     def test_get_tags_exist(self):
         for c in self.data:
             response = self.client.get(reverse(getTags), {'c': c['name']})
+            expect_tags = str(map(lambda t: {
+                'name': t['name'], 
+                'question_dist': t['question_dist']
+            }, c['tags'])).replace('\'', '\"')
             expect = '''{
                 "err_code": %d, 
                 "err_msg": "%s", 
-                "tags": [{"l0": 2, "l3": 1}], 
+                "tags": %s, 
                 "q_token": "%s"
-            }''' % (err["OK"].code, err["OK"].msg, self.client.session['q_token'][-1])
+            }''' % (err["OK"].code, err["OK"].msg, expect_tags, self.client.session['q_token'])
             self.assertJSONEqual(response.content, expect)
 
     """

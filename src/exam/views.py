@@ -14,23 +14,22 @@ def index(request):
 
 def getTags(request):
     # TODO deal with cache
-    categories = Category.objects.filter(name=request.GET['c'])
-    if(len(categories) == 0):
+    category = getCachedCategory(request.GET['c'])
+    if(not category):
         return JsonResponse({'err_code': err['NOT_EXIST'].code, 'err_msg': [u'category ' + err['NOT_EXIST'].msg]})
-    tags = categories[0].tag_set.all()
+    tags = category['tags']
     q_token = genQtoken()
     q_token_name = 'q_token'
     res = {
         'err_code': err['OK'].code,
         'err_msg': err['OK'].msg,
-        'tags': map(lambda t: t.questionDistribution(), tags),
+        'tags': map(lambda t: {'name': t['name'], 'question_dist': t['question_dist']}, tags),
         q_token_name: q_token
     }
-    # put q_token into session
-    if request.session.has_key(q_token_name):
-        request.session[q_token_name].append(q_token)
-    else:
-        request.session[q_token_name] = [q_token]
+    # put q_token into session, 
+    # and when request for questions, put question id as key into session with current q_token as value
+    # TODO use session based on memory or cache
+    request.session[q_token_name] = q_token
     return JsonResponse(res)
 
 def getQuestions(request):

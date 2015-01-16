@@ -24,6 +24,7 @@ def getTagsInCategory(category):
         new_t['id'] = t.id
         new_t['name'] = t.name
         new_t['questions'] = getQuestionsInTag(t)
+        new_t['question_dist'] = t.questionDistribution()
         ts.append(new_t)
     return ts
 
