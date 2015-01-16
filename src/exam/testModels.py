@@ -38,7 +38,7 @@ class TagMethodTest(TestCase):
     question_distribution should return a correct result
     """
     def test_question_distribution_correct(self):
-        expect = {'l0': 2, 'l3': 1}
+        expect = self.data[0]['tags'][0]['question_dist']
         actual = Tag.objects.get(name='C').questionDistribution()
         self.assertEqual(expect, actual)
 

@@ -26,12 +26,15 @@ class Tag(models.Model):
     def questionDistribution(self):
         dist = {}
         for q in self.question_set.all():
-            key = u'l%d' % q.level
+            key = q.level
             if dist.has_key(key):
                 dist[key] += 1
             else:
                 dist[key] = 1
-        return dist
+        res = []
+        for k in dist:
+            res.append({'level': k, 'count': dist[k]})
+        return res
 
 # only choice questions
 class Question(models.Model):

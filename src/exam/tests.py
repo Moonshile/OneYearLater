@@ -12,10 +12,12 @@ def commonSetUp():
                 {'content': 'Is #include a macro?', 'level': 0},
                 {'content': 'Is main() necessary?', 'level': 0},
                 {'content': 'What does (*c)(const void *) means?', 'level': 3},
-            ]
+            ],
+            'question_dist': [{'level': 0, 'count' : 2}, {'level': 3, 'count': 1}],
         },{
             'name': 'C++',
             'questions': [],
+            'question_dist': [],
         }]
     },{
         'name': 'Gaokao',
