@@ -8,6 +8,14 @@ from forever import const
 # classify tags to their categories, for example, 'Programmer', 'Gaokao'
 class Category(models.Model):
     name = models.CharField(max_length=const.CHAR_MID, unique=True)
+    # count of questions should be requested the first time
+    n_first_batch = models.SmallIntegerField(default=5)
+    # count of questions should be requested the subsequent times
+    n_next_batch = models.SmallIntegerField(default=1)
+    # if user has answered this number of questions correctly, then finish
+    n_min = models.SmallIntegerField(default=10)
+    # else if user has answered this number of questions totally, then finish
+    n_max = models.SmallIntegerField(default=15)
 
     def __unicode__(self):
         return self.name

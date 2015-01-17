@@ -41,6 +41,7 @@ def getTags(request):
     # put q_token into session, 
     # and when request for questions, put question id as key into session with current q_token as value
     request.session[q_token_name] = q_token
+    request.session[q_token] = category['n_first_batch']
     return JsonResponse(res)
 
 def getQuestions(request):

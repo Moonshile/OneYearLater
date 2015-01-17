@@ -30,6 +30,7 @@ class GetTagsTests(TestCase):
                 "q_token": "%s"
             }''' % (err["OK"].code, err["OK"].msg, expect_tags, self.client.session['q_token'])
             self.assertJSONEqual(response.content, expect)
+            self.assertEqual(self.client.session[self.client.session['q_token']], c['n_first_batch'])
 
     """
     The request for get tags in non-exist category
@@ -75,7 +76,35 @@ class GetQuestionsTests(TestCase):
         self.data = commonSetUp()
 
     """
+    Get questions correctly
     """
+    def test_get_questions_correctly(self):
+        pass
+    
+    """
+    Get questions with wrong tag
+    should get a empty quesion list
+    """
+    def test_get_questions_with_wrong_tag(self):
+        pass
 
+    """
+    Get questions with wrong level
+    should get a empty quesion list
+    """
+    def test_get_questions_with_wrong_level(self):
+        pass
 
+    """
+    Get questions with wrong q_token
+    should forbid
+    """
+    def test_get_questions_with_wrong_q_token(self):
+        pass
 
+    """
+    Get last question
+    After this get, the bound value to q_token should be set to 0
+    """
+    def test_get_last_question(self):
+        pass

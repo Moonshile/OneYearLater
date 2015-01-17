@@ -40,7 +40,11 @@ def getCachedCategory(category_name):
     if len(cs) == 0:
         return None
     c = cs[0]
-    category = {'id': c.id, 'name': c.name, 'tags': getTagsInCategory(c)}
+    category = {'id': c.id, 'name': c.name, 
+        'n_first_batch': c.n_first_batch, 'n_next_batch': c.n_next_batch,
+        'n_min': c.n_min, 'n_max': c.n_max,
+        'tags': getTagsInCategory(c)
+    }
     cache.set(key, category)
     return category
 

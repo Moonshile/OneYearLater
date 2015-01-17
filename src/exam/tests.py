@@ -6,6 +6,10 @@ from exam.models import *
 def commonSetUp():
     data = [{
         'name': 'Programmer',
+        'n_first_batch': 5,
+        'n_next_batch': 1,
+        'n_min': 10,
+        'n_max': 15,
         'tags': [{
             'name': 'C', 
             'questions': [
@@ -21,10 +25,16 @@ def commonSetUp():
         }]
     },{
         'name': 'Gaokao',
+        'n_first_batch': 12,
+        'n_next_batch': 0,
+        'n_min': 12,
+        'n_max': 12,
         'tags': [],
     }]
     for c in data:
-        category = Category.objects.create(name=c['name'])
+        category = Category.objects.create(name=c['name'], n_min=c['n_min'], n_max=c['n_max'],
+            n_first_batch=c['n_first_batch'], n_next_batch=c['n_next_batch']
+        )
         c['id'] = category.id
         for t in c['tags']:
             tag = Tag.objects.create(name=t['name'], category=category)
