@@ -48,6 +48,19 @@ def getCachedCategory(category_name):
     cache.set(key, category)
     return category
 
+# get a dict that map tags to their categories
+def getCachedTagCategoryMap():
+    key = 'tag_category_map'
+    m = cache.get(key)
+    if m:
+        return m
+    tags = Tag.objects.all()
+    m = {}
+    for t in tags:
+        m[t.name] = t.category.name
+    cache.set(key, m)
+    return m
+
 # generate a 6-charater random string
 def genQtoken():
     return string.join(random.sample(RAND_STR_BASE, 6)).replace(' ' , '')

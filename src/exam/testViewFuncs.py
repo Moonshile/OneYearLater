@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.core.cache import cache
 
 from exam.models import *
-from exam.viewFuncs import getQuestionsInTag, getTagsInCategory, getCachedCategory, genQtoken
+from exam.viewFuncs import *
 from exam.tests import commonSetUp
 
 class GetQuestionsInTagTests(TestCase):
@@ -55,7 +55,10 @@ class GetTagsInCategoryTests(TestCase):
 class GetCachedCategoryTests(TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         self.data = commonSetUp()
+        for c in self.data:
+            cache.delete('category' + c['name'])
 
     """
     Get data of exist category
@@ -65,7 +68,6 @@ class GetCachedCategoryTests(TestCase):
             expect = c
             actual = getCachedCategory(c['name'])
             self.assertEqual(actual, expect)
-            cache.delete('category' + c['name'])
 
     """
     Get data of not exist category
@@ -80,11 +82,35 @@ class GetCachedCategoryTests(TestCase):
     """
     def test_cached_data_of_get_cached_category(self):
         for c in self.data:
-            cache.delete('category' + c['name'])
             expect = getCachedCategory(c['name'])
             actual = cache.get('category' + c['name'])
             self.assertEqual(actual, expect)
-            cache.delete('category' + c['name'])
+
+class GetCachedTagCategoryMapTests(TestCase):
+
+    def setUp(self):
+        self.cache_key = 'tag_category_map'
+        cache.delete(self.cache_key)
+        self.data = commonSetUp()
+
+    """
+    Get correct tag category map
+    """
+    def test_get_correct_cached_tag_category_map(self):
+        tags = getCachedTagCategoryMap()
+        for c in self.data:
+            expect = c['name']
+            for t in c['tags']:
+                actual = tags[t['name']]
+                self.assertEqual(actual, expect)
+
+    """
+    The map is in cached
+    """
+    def test_got_tag_category_map_is_in_cache(self):
+        expect = getCachedTagCategoryMap()
+        actual = cache.get(self.cache_key)
+        self.assertEqual(actual, expect)
 
 class GenQtokenTests(TestCase):
 
