@@ -32,8 +32,10 @@ def getTagsInCategory(category):
 def getCachedCategory(category_name):
     key = 'category' + category_name
     category = cache.get(key)
+    # if in cache
     if category:
         return category
+    # not in cache
     cs = Category.objects.filter(name=category_name)
     if len(cs) == 0:
         return None

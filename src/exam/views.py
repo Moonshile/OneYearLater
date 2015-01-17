@@ -13,7 +13,7 @@ def index(request):
     pass
 
 def getTags(request):
-    # TODO deal with cache
+    # TODO deal with to frequent requests from a user
     category = getCachedCategory(request.GET['c'])
     if(not category):
         return JsonResponse({'err_code': err['NOT_EXIST'].code, 'err_msg': [u'category ' + err['NOT_EXIST'].msg]})
@@ -28,7 +28,6 @@ def getTags(request):
     }
     # put q_token into session, 
     # and when request for questions, put question id as key into session with current q_token as value
-    # TODO use session based on memory or cache
     request.session[q_token_name] = q_token
     return JsonResponse(res)
 
