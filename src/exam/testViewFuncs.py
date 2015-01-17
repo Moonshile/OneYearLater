@@ -80,6 +80,7 @@ class GetCachedCategoryTests(TestCase):
     """
     def test_cached_data_of_get_cached_category(self):
         for c in self.data:
+            cache.delete('category' + c['name'])
             expect = getCachedCategory(c['name'])
             actual = cache.get('category' + c['name'])
             self.assertEqual(actual, expect)

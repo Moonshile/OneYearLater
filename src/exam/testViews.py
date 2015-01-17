@@ -48,20 +48,34 @@ class GetTagsTests(TestCase):
     """
     def test_get_tags_too_frequently(self):
         response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        forbid_code = 403
         for i in range(0, REQ_FREQUENCY_LIMIT + 1):
+            # within the permitted count, get normal response
             self.assertEqual(response.status_code, 200)
             response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.assertEqual(response.status_code, 403)
+        # access frequency is over the limitation, then forbid
+        self.assertEqual(response.status_code, forbid_code)
         import time
+        # during the forbidden-time, access will refresh the forbidden-time
         time.sleep(1) # sleep 1 second
         response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, forbid_code)
+        # forbidden-time has been refreshed by the lastest access
+        time.sleep(1.5)
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, forbid_code)
+        # now could access normally again
         time.sleep(2.5)
         response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
         self.assertEqual(response.status_code, 200)
 
+class GetQuestionsTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+
+    """
+    """
 
 
 
-
-        
