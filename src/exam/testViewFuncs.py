@@ -101,6 +101,7 @@ class GenQtokenTests(TestCase):
     def test_generate_6_char_q_token(self):
         import re
         pattern = re.compile(r'[A-Z0-9]{6}')
-        actual = True if pattern.match(genQtoken()) else False
-        self.assertEqual(actual, True)
+        for i in range(0, 100):
+            actual = True if pattern.match(genQtoken()) else False
+            self.assertEqual(actual, True)
 

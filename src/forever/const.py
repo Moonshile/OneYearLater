@@ -13,6 +13,9 @@ CHAR_MID = 16
 CHAR_LONG = 32
 CHAR_XLONG = 64
 
+# count of limited request if a view function need
+REQ_FREQUENCY_LIMIT = 10
+
 # random string base
 RAND_STR_BASE = '1234567890QWERTYUIOPLKJHGFDSAZXCVBNM'
 

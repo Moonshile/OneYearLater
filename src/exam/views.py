@@ -2,18 +2,30 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.exceptions import PermissionDenied
+from django.core.cache import cache
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.conf import settings
 import random, string
 
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from exam.viewFuncs import getCachedCategory, genQtoken
-from forever.const import err, RAND_STR_BASE
+from forever.const import err, RAND_STR_BASE, REQ_FREQUENCY_LIMIT
+from forever.settings import DEBUG
 
 def index(request):
     pass
 
 def getTags(request):
-    # TODO deal with to frequent requests from a user
+    # deal with too frequent requests from a user
+    ssid = request.COOKIES.get(settings.SESSION_COOKIE_NAME, None)
+    cached_freq = cache.get(ssid, 0)
+    if cached_freq and cached_freq >= REQ_FREQUENCY_LIMIT:
+        cache.set(ssid, cached_freq, 2 if DEBUG else 3600) # forbid access in 1 hour
+        raise PermissionDenied
+    else:
+        cached_freq += 1
+    cache.set(ssid, cached_freq, 1 if DEBUG else 300) # cache for 300 seconds
+    # begin to get the tags
     category = getCachedCategory(request.GET['c'])
     if(not category):
         return JsonResponse({'err_code': err['NOT_EXIST'].code, 'err_msg': [u'category ' + err['NOT_EXIST'].msg]})
@@ -32,12 +44,15 @@ def getTags(request):
     return JsonResponse(res)
 
 def getQuestions(request):
-    pass
+    res = {}
+    return JsonResponse(res)
 
 def handInAnswer(request):
-    pass
+    res = {}
+    return JsonResponse(res)
 
 def finishAnswer(request):
-    pass
+    res = {}
+    return JsonResponse(res)
 
 

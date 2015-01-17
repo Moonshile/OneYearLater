@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from exam.views import getTags, getQuestions, handInAnswer, finishAnswer
 from exam.tests import commonSetUp
-from forever.const import err
+from forever.const import err, REQ_FREQUENCY_LIMIT
 
 class GetTagsTests(TestCase):
 
@@ -48,9 +48,17 @@ class GetTagsTests(TestCase):
     """
     def test_get_tags_too_frequently(self):
         response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        for i in range(0, 10):
+        for i in range(0, REQ_FREQUENCY_LIMIT + 1):
+            self.assertEqual(response.status_code, 200)
             response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
         self.assertEqual(response.status_code, 403)
+        import time
+        time.sleep(1) # sleep 1 second
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, 403)
+        time.sleep(2.5)
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, 200)
 
 
 
