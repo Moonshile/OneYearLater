@@ -45,15 +45,36 @@ def getTags(request):
     return JsonResponse(res)
 
 def getQuestions(request):
-    res = {}
+    q = {
+        'id': 0,
+        'content': '',
+        'level': 0,
+        'op_ans':[],
+    }
+    res = {
+        'err_code': 0,
+        'err_msg': '',
+        'q_token': '',
+        'has_next': True,
+        'questions': [q],
+    }
     return JsonResponse(res)
 
 def handInAnswer(request):
-    res = {}
+    res = {
+        'err_code': 0,
+        'err_msg': '',
+    }
     return JsonResponse(res)
 
 def finishAnswer(request):
-    res = {}
+    res = {
+        'err_code': 0,
+        'err_msg': '',
+        'rank': {'No.': 1, 'rate': .9},
+        'answer_sheet': {'token': '', id: '', 'score': 0},
+        'share_url': '',
+    }
     return JsonResponse(res)
 
 
