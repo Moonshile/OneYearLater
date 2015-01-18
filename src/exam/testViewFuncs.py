@@ -6,9 +6,34 @@ from exam.models import *
 from exam.viewFuncs import *
 from exam.tests import commonSetUp
 
+class GetOptionalAnswersOfQuestionTests(TestCase):
+
+    def setUp(self):
+        self.maxDiff = None
+        self.data = commonSetUp()
+
+    """
+    Get answers of a question with many answers
+    """
+    def test_get_many_answers_of_question(self):
+        q = OptionalAnswer.objects.all()[0].question
+        expect = self.data[0]['tags'][0]['questions'][0]['op_ans']
+        actual = getOptionalAnswersOfQuestion(q)
+        self.assertEqual(actual, expect)
+
+    """
+    Get answers of a question with no answer
+    """
+    def test_get_no_question_in_tag(self):
+        q = filter(lambda x: x.optionalanswer_set.count() == 0, Question.objects.all())[0]
+        expect = []
+        actual = getOptionalAnswersOfQuestion(q)
+        self.assertEqual(actual, expect)
+
 class GetQuestionsInTagTests(TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         self.data = commonSetUp()
 
     """
@@ -24,7 +49,7 @@ class GetQuestionsInTagTests(TestCase):
     Get questions in an tag with no question
     """
     def test_get_no_question_in_tag(self):
-        tag = Tag.objects.filter(name='C++')[0]
+        tag = Tag.objects.filter(name='Empty')[0]
         expect = []
         actual = getQuestionsInTag(tag)
         self.assertEqual(actual, expect)
@@ -32,6 +57,7 @@ class GetQuestionsInTagTests(TestCase):
 class GetTagsInCategoryTests(TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         self.data = commonSetUp()
 
     """
@@ -57,8 +83,7 @@ class GetCachedCategoryTests(TestCase):
     def setUp(self):
         self.maxDiff = None
         self.data = commonSetUp()
-        for c in self.data:
-            cache.delete('category' + c['name'])
+        cache.clear()
 
     """
     Get data of exist category
@@ -89,8 +114,7 @@ class GetCachedCategoryTests(TestCase):
 class GetCachedTagCategoryMapTests(TestCase):
 
     def setUp(self):
-        self.cache_key = 'tag_category_map'
-        cache.delete(self.cache_key)
+        cache.clear()
         self.data = commonSetUp()
 
     """
@@ -109,7 +133,8 @@ class GetCachedTagCategoryMapTests(TestCase):
     """
     def test_got_tag_category_map_is_in_cache(self):
         expect = getCachedTagCategoryMap()
-        actual = cache.get(self.cache_key)
+        cache_key = 'tag_category_map'
+        actual = cache.get(cache_key)
         self.assertEqual(actual, expect)
 
 class GenQtokenTests(TestCase):

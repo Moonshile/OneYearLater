@@ -5,6 +5,17 @@ import random, string
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from forever.const import RAND_STR_BASE
 
+def getOptionalAnswersOfQuestion(question):
+    ans = []
+    answers = question.optionalanswer_set.all()
+    for a in answers:
+        new_a = {}
+        new_a['id'] = a.id
+        new_a['content'] = a.content
+        new_a['is_sln'] = a.is_solution
+        ans.append(new_a)
+    return ans
+
 def getQuestionsInTag(tag):
     qs = []
     questions = tag.question_set.all()
@@ -13,6 +24,7 @@ def getQuestionsInTag(tag):
         new_q['id'] = q.id
         new_q['content'] = q.content
         new_q['level'] = q.level
+        new_q['op_ans'] = getOptionalAnswersOfQuestion(q)
         qs.append(new_q)
     return qs
 
@@ -37,7 +49,7 @@ def getCachedCategory(category_name):
         return category
     # not in cache
     cs = Category.objects.filter(name=category_name)
-    if len(cs) == 0:
+    if cs.count() == 0:
         return None
     c = cs[0]
     category = {'id': c.id, 'name': c.name, 
