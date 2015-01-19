@@ -32,6 +32,7 @@ class GetTagsTests(TestCase):
             }''' % (err['OK'].code, err['OK'].msg, expect_tags, self.client.session['q_token'])
             self.assertJSONEqual(response.content, expect)
             self.assertEqual(self.client.session[self.client.session['q_token']], c['n_first_batch'])
+            self.assertEqual(self.client.session['c_name'], c['name'])
 
     """
     The request for get tags in non-exist category
@@ -75,6 +76,8 @@ class GetQuestionsTests(TestCase):
 
     def setUp(self):
         self.data = commonSetUp()
+        self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.client.session.clear()
 
     def assertCommon(self, actual_dict, expect_err_str):
         expect_err = err[expect_err_str]
@@ -91,13 +94,15 @@ class GetQuestionsTests(TestCase):
             self.assertEqual(q['id'] not in qs, True)
             qs.append(q['id'])
 
+    def hackSession(self, key, value):
+        session = self.client.session
+        session[key] = value
+        session.save()
+
     """
     Get questions with random tag and random level correctly
     """
     def test_get_questions_random_tag_level(self):
-        category_name = self.data[0]['name']
-        # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # the first loop for initial questions, and others for next questions
         for i in range(0, 3):
@@ -108,7 +113,7 @@ class GetQuestionsTests(TestCase):
             for q in actual['questions']:
                 actual_q = False
                 for t in self.data[0]['tags']:
-                    actual_q = actual_q or q in t
+                    actual_q = actual_q or q in t['questions']
                 self.assertEqual(actual_q, True)
             q_token = self.client.session['q_token']
 
@@ -116,10 +121,8 @@ class GetQuestionsTests(TestCase):
     Get questions with random tag correctly
     """
     def test_get_questions_random_tag(self):
-        category_name = self.data[0]['name']
         expect_level = 0
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # the first loop for initial questions, and others for next questions
         for i in range(0, 3):
@@ -131,7 +134,7 @@ class GetQuestionsTests(TestCase):
                 actual_q = False
                 self.assertEqual(q['level'], expect_level)
                 for t in self.data[0]['tags']:
-                    actual_q = actual_q or q in t
+                    actual_q = actual_q or q in t['questions']
                 self.assertEqual(actual_q, True)
             q_token = self.client.session['q_token']
 
@@ -139,10 +142,8 @@ class GetQuestionsTests(TestCase):
     Get questions with random level correctly
     """
     def test_get_questions_random_level(self):
-        category_name = self.data[0]['name']
         expect_tag = 'C'
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # the first loop for initial questions, and others for next questions
         for i in range(0, 3):
@@ -155,7 +156,7 @@ class GetQuestionsTests(TestCase):
                 for t in self.data[0]['tags']:
                     if t['name'] != expect_tag:
                         pass
-                    actual_q = actual_q or q in t
+                    actual_q = actual_q or q in t['questions']
                 self.assertEqual(actual_q, True)
             q_token = self.client.session['q_token']
 
@@ -163,11 +164,9 @@ class GetQuestionsTests(TestCase):
     Get questions with fixed tag and level correctly
     """
     def test_get_questions_fixed_tag_level(self):
-        category_name = self.data[0]['name']
         expect_level = 0
         expect_tag = 'C'
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # the first loop for initial questions, and others for next questions
         for i in range(0, 3):
@@ -181,7 +180,7 @@ class GetQuestionsTests(TestCase):
                 for t in self.data[0]['tags']:
                     if t['name'] != expect_tag:
                         pass
-                    actual_q = actual_q or q in t
+                    actual_q = actual_q or q in t['questions']
                 self.assertEqual(actual_q, True)
             q_token = self.client.session['q_token']
 
@@ -197,10 +196,8 @@ class GetQuestionsTests(TestCase):
     should get a empty quesion list
     """
     def test_get_initial_questions_with_wrong_tag(self):
-        category_name = self.data[0]['name']
         wrong_tag = 'not_exist'
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # assert
         response = self.client.get(reverse(getQuestions), {'t': wrong_tag, 'q_token': q_token})
@@ -212,11 +209,9 @@ class GetQuestionsTests(TestCase):
     should get a empty quesion list
     """
     def test_get_next_questions_with_wrong_tag(self):
-        category_name = self.data[0]['name']
         wrong_tag = 'not_exist'
         exist_tag = self.data[0]['tags'][0]['name']
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         response = self.client.get(reverse(getQuestions), {'t': exist_tag, 'q_token': q_token})
         q_token = self.client.session['q_token']
@@ -230,27 +225,22 @@ class GetQuestionsTests(TestCase):
     should get a empty quesion list
     """
     def test_get_initial_questions_with_wrong_level(self):
-        category_name = self.data[0]['name']
         wrong_level = -1
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # assert
         response = self.client.get(reverse(getQuestions), {'l': wrong_level, 'q_token': q_token})
         actual = json.loads(response.content)
         self.assertEqual(actual['questions'], [])
-        pass
 
     """
     Get next questions with wrong level
     should get a empty quesion list
     """
     def test_get_next_questions_with_wrong_level(self):
-        category_name = self.data[0]['name']
         wrong_level = -1
         exist_level = 0
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         response = self.client.get(reverse(getQuestions), {'l': exist_level, 'q_token': q_token})
         q_token = self.client.session['q_token']
@@ -264,33 +254,21 @@ class GetQuestionsTests(TestCase):
     Should return all the rest questions and set bound value to q_token to 0
     """
     def test_get_questions_has_but_not_enough(self):
-        category_name = self.data[0]['name']
-        tag = self.data[0]['tags'][0]['name']
-        level = 0
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # hack the count of questions requested so that there is not enough questions
-        self.client.session[q_token] = len(self.data[0]['tags'][0]['questions']) + 1
+        expect_count = reduce(lambda res, t: res + len(t['questions']), self.data[0]['tags'], 0)
+        self.hackSession(q_token, expect_count + 1)
         # assert
-        response = self.client.get(reverse(getQuestions), {'t': tag, 'l': level, 'q_token': q_token})
+        response = self.client.get(reverse(getQuestions), {'q_token': q_token})
         actual = json.loads(response.content)
         self.assertCommon(actual_dict=actual, expect_err_str='OK')
         for q in actual['questions']:
             actual_q = False
-            self.assertEqual(q['level'], level)
             for t in self.data[0]['tags']:
-                if t['name'] != tag:
-                    pass
-                actual_q = actual_q or q in t
+                actual_q = actual_q or q in t['questions']
             self.assertEqual(actual_q, True)
-        self.assertEqual(
-            len(actual['questions']), 
-            len(filter(
-                lambda x: x['questions']['level'] == level), 
-                filter(lambda x: x['name'] == tag, self.data[0]['tags'])[0]
-            )
-        )
+        self.assertEqual(len(actual['questions']), expect_count)
         q_token = self.client.session['q_token']
         self.assertEqual(self.client.session[q_token], 0)
 
@@ -299,22 +277,17 @@ class GetQuestionsTests(TestCase):
     Should return empty question list and set bound value to q_token to 0
     """
     def test_get_questions_but_no_more(self):
-        category_name = self.data[0]['name']
-        tag = self.data[0]['tags'][0]['name']
-        level = 0
+        not_found = 404
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         # hack the count of questions requested so that there is not enough questions
-        self.client.session[q_token] = len(self.data[0]['tags'][0]['questions']) + 1
-        response = self.client.get(reverse(getQuestions), {'t': tag, 'l': level, 'q_token': q_token})
-        q_token = self.client.session['q_token']
-        # assert
-        response = self.client.get(reverse(getQuestions), {'t': tag, 'l': level, 'q_token': q_token})
-        actual = json.loads(response.content)
-        self.assertEqual(len(actual['questions']), 0)
+        self.hackSession(q_token, reduce(lambda res, t: res + len(t['questions']), self.data[0]['tags'], 0))
+        response = self.client.get(reverse(getQuestions), {'q_token': q_token})
         q_token = self.client.session['q_token']
         self.assertEqual(self.client.session[q_token], 0)
+        # assert
+        response = self.client.get(reverse(getQuestions), {'q_token': q_token})
+        self.assertEqual(response.status_code, not_found)
 
 
     """
@@ -322,12 +295,10 @@ class GetQuestionsTests(TestCase):
     should forbid
     """
     def test_get_questions_with_wrong_q_token(self):
-        category_name = self.data[0]['name']
         tag = self.data[0]['tags'][0]['name']
         level = 0
         forbidden_code = 403
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = 'wrong'
         # assert
         response = self.client.get(reverse(getQuestions), {'t': tag, 'l': level, 'q_token': q_token})
@@ -338,11 +309,9 @@ class GetQuestionsTests(TestCase):
     After this get, the bound value to q_token should be set to 0
     """
     def test_get_last_question_with_enough_correct(self):
-        category_name = self.data[0]['name']
         tag = self.data[0]['tags'][0]['name']
         level = 0
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         q_token = self.client.session['q_token']
@@ -351,7 +320,7 @@ class GetQuestionsTests(TestCase):
         ans_session = []
         for i in range(0, self.data[0]['n_min']):
             ans_session.append(ans)
-        self.client.session['answers'] = ans_session
+        self.hackSession('answers', ans_session)
         # assert
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         actual = json.loads(response.content)
@@ -364,7 +333,7 @@ class GetQuestionsTests(TestCase):
             for t in self.data[0]['tags']:
                 if t['name'] != expect_tag:
                     pass
-                actual_q = actual_q or q in t
+                actual_q = actual_q or q in t['questions']
             self.assertEqual(actual_q, True)
 
     """
@@ -372,20 +341,18 @@ class GetQuestionsTests(TestCase):
     Bound value to q_token should be set to 0
     """
     def test_get_last_question_with_answered_max(self):
-        category_name = self.data[0]['name']
         tag = self.data[0]['tags'][0]['name']
         level = 0
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         q_token = self.client.session['q_token']
-        # hack the total answers in session
-        ans = OptionalAnswer.objects.filter(is_solution=False)[0].id
-        ans_session = []
+        # hack the total qids in session
+        qid = Question.objects.all()[0].id
+        qids_session = []
         for i in range(0, self.data[0]['n_max']):
-            ans_session.append(ans)
-        self.client.session['answers'] = ans_session
+            qids_session.append(qid)
+        self.hackSession('qids', qids_session)
         # assert
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         actual = json.loads(response.content)
@@ -398,7 +365,7 @@ class GetQuestionsTests(TestCase):
             for t in self.data[0]['tags']:
                 if t['name'] != expect_tag:
                     pass
-                actual_q = actual_q or q in t
+                actual_q = actual_q or q in t['questions']
             self.assertEqual(actual_q, True)
 
     """
@@ -406,17 +373,15 @@ class GetQuestionsTests(TestCase):
     Should return 404
     """
     def test_get_questions_with_q_token_bound_0(self):
-        category_name = self.data[0]['name']
         tag = self.data[0]['tags'][0]['name']
         level = 0
         not_found_code = 404
         # preparation
-        self.client.get(reverse(getTags), {'c': category_name})
         q_token = self.client.session['q_token']
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         q_token = self.client.session['q_token']
         # hack the bound value to q_token
-        self.client.session[q_token] = 0
+        self.hackSession(q_token, 0)
         # assert
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         self.assertEqual(response.status_code, not_found_code)
