@@ -9,7 +9,7 @@ import random, string
 
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from exam.viewFuncs import getCachedCategory, genQtoken, nextQuestions
-from exam import ss
+from exam import ss, cc
 from forever.const import err, RAND_STR_BASE, REQ_FREQUENCY_LIMIT
 from forever.settings import DEBUG
 

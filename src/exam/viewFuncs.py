@@ -2,6 +2,7 @@
 from django.core.cache import cache
 import random, string
 
+from exam import cc
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from forever.const import RAND_STR_BASE
 
@@ -42,7 +43,7 @@ def getTagsInCategory(category):
 
 # must guarantee that the category name exists
 def getCachedCategory(category_name):
-    key = 'category' + category_name
+    key = cc.CATEGORY_BASE + category_name
     category = cache.get(key)
     # if in cache
     if category:
@@ -62,15 +63,14 @@ def getCachedCategory(category_name):
 
 # get a dict that map tags to their categories
 def getCachedTagCategoryMap():
-    key = 'tag_category_map'
-    m = cache.get(key)
+    m = cache.get(cc.TAG_CATEGORY_MAP)
     if m:
         return m
     tags = Tag.objects.all()
     m = {}
     for t in tags:
         m[t.name] = t.category.name
-    cache.set(key, m)
+    cache.set(cc.TAG_CATEGORY_MAP, m)
     return m
 
 # generate a 6-charater random string

@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
+from exam import cc, ss
 from exam.models import *
 from exam.viewFuncs import *
 from exam.views import *
@@ -110,7 +111,7 @@ class GetCachedCategoryTests(TestCase):
     def test_cached_data_of_get_cached_category(self):
         for c in self.data:
             expect = getCachedCategory(c['name'])
-            actual = cache.get('category' + c['name'])
+            actual = cache.get(cc.CATEGORY_BASE + c['name'])
             self.assertEqual(actual, expect)
 
 class GetCachedTagCategoryMapTests(TestCase):
@@ -135,8 +136,7 @@ class GetCachedTagCategoryMapTests(TestCase):
     """
     def test_got_tag_category_map_is_in_cache(self):
         expect = getCachedTagCategoryMap()
-        cache_key = 'tag_category_map'
-        actual = cache.get(cache_key)
+        actual = cache.get(cc.TAG_CATEGORY_MAP)
         self.assertEqual(actual, expect)
 
 class GenQtokenTests(TestCase):
@@ -164,8 +164,8 @@ class NextQuestionsWithRandomTagLevelTests(TestCase):
     def setUp(self):
         self.data = commonSetUp()
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get('qids', [])
-        self.category = getCachedCategory(self.client.session['c_name'])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid = map(
             lambda q: q['id'],
             reduce(
@@ -179,7 +179,7 @@ class NextQuestionsWithRandomTagLevelTests(TestCase):
     Generate next questions correctly when qids is empty
     """
     def test_next_questions_with_random_tag_level_empty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         actual = nextQuestionsWithRandomTagLevel(self.qids, self.category, count)
         self.assertEqual(len(actual), count)
         for q in actual:
@@ -190,7 +190,7 @@ class NextQuestionsWithRandomTagLevelTests(TestCase):
     Generate next questions correctly when qids is not empty
     """
     def test_next_questions_with_random_tag_level_nonempty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = random.sample(self.all_qid, len(self.all_qid)/2)
         actual = nextQuestionsWithRandomTagLevel(self.qids, self.category, count)
         self.assertEqual(len(actual), count)
@@ -213,7 +213,7 @@ class NextQuestionsWithRandomTagLevelTests(TestCase):
     Generate next questions correctly when there is no more questions
     """
     def test_next_questions_with_random_tag_level_no_more(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithRandomTagLevel(self.qids, self.category, count)
         self.assertEqual(len(actual), 0)
@@ -224,8 +224,8 @@ class NextQuestionsWithRandomTagTests(TestCase):
         self.data = commonSetUp()
         self.level = 0
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get('qids', [])
-        self.category = getCachedCategory(self.client.session['c_name'])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_level = map(
             lambda q: q['id'],
             filter(
@@ -250,7 +250,7 @@ class NextQuestionsWithRandomTagTests(TestCase):
     Generate next questions correctly when qids is empty
     """
     def test_next_questions_with_random_tag_empty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         actual = nextQuestionsWithRandomTag(self.qids, self.category, self.level, count)
         self.assertEqual(len(actual), count)
         for q in actual:
@@ -262,7 +262,7 @@ class NextQuestionsWithRandomTagTests(TestCase):
     Generate next questions correctly when qids is not empty
     """
     def test_next_questions_with_random_tag_nonempty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = random.sample(self.all_qid, len(self.all_qid)/2)
         actual = nextQuestionsWithRandomTag(self.qids, self.category, self.level, count)
         self.assertEqual(len(actual), count)
@@ -287,7 +287,7 @@ class NextQuestionsWithRandomTagTests(TestCase):
     Generate next questions correctly when there is no more questions
     """
     def test_next_questions_with_random_tag_no_more(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithRandomTag(self.qids, self.category, self.level, count)
         self.assertEqual(len(actual), 0)
@@ -296,7 +296,7 @@ class NextQuestionsWithRandomTagTests(TestCase):
     Generate next questions correctly when level is wrong
     """
     def test_next_questions_with_random_tag_wrong_level(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithRandomTag(self.qids, self.category, -1, count)
         self.assertEqual(len(actual), 0)
@@ -307,8 +307,8 @@ class NextQuestionsWithRandomLevelTests(TestCase):
         self.data = commonSetUp()
         self.tag = self.data[0]['tags'][0]['name']
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get('qids', [])
-        self.category = getCachedCategory(self.client.session['c_name'])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_tag = map(
             lambda q: q['id'],
             self.data[0]['tags'][0]['questions']
@@ -326,7 +326,7 @@ class NextQuestionsWithRandomLevelTests(TestCase):
     Generate next questions correctly when qids is empty
     """
     def test_next_questions_with_random_level_empty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         actual = nextQuestionsWithRandomLevel(self.qids, self.category, self.tag, count)
         self.assertEqual(len(actual), count)
         for q in actual:
@@ -337,7 +337,7 @@ class NextQuestionsWithRandomLevelTests(TestCase):
     Generate next questions correctly when qids is not empty
     """
     def test_next_questions_with_random_level_nonempty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = random.sample(self.all_qid, len(self.all_qid)/2)
         actual = nextQuestionsWithRandomLevel(self.qids, self.category, self.tag, count)
         self.assertEqual(len(actual), count)
@@ -360,7 +360,7 @@ class NextQuestionsWithRandomLevelTests(TestCase):
     Generate next questions correctly when there is no more questions
     """
     def test_next_questions_with_random_level_no_more(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithRandomLevel(self.qids, self.category, self.tag, count)
         self.assertEqual(len(actual), 0)
@@ -369,7 +369,7 @@ class NextQuestionsWithRandomLevelTests(TestCase):
     Generate next questions correctly when tag is wrong
     """
     def test_next_questions_with_random_level_wrong_tag(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithRandomLevel(self.qids, self.category, 'not_exist', count)
         self.assertEqual(len(actual), 0)
@@ -381,8 +381,8 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
         self.tag = self.data[0]['tags'][0]['name']
         self.level = 0
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get('qids', [])
-        self.category = getCachedCategory(self.client.session['c_name'])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_tag_level = map(
             lambda q: q['id'],
             filter(lambda q: q['level'] == self.level, self.data[0]['tags'][0]['questions'])
@@ -400,7 +400,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when qids is empty
     """
     def test_next_questions_with_fixed_level_empty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, self.tag, self.level, count)
         self.assertEqual(len(actual), count)
         for q in actual:
@@ -411,7 +411,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when qids is not empty
     """
     def test_next_questions_with_fixed_level_nonempty_qids(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = random.sample(self.all_qid, len(self.all_qid_with_tag_level)/2)
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, self.tag, self.level, count)
         self.assertEqual(len(actual), count)
@@ -434,7 +434,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when there is no more questions
     """
     def test_next_questions_with_fixed_level_no_more(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, self.tag, self.level, count)
         self.assertEqual(len(actual), 0)
@@ -443,7 +443,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when tag is wrong
     """
     def test_next_questions_with_fixed_level_wrong_tag(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, 'not_exist', self.level, count)
         self.assertEqual(len(actual), 0)
@@ -452,7 +452,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when level is wrong
     """
     def test_next_questions_with_fixed_level_wrong_level(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, self.tag, -1, count)
         self.assertEqual(len(actual), 0)
@@ -461,7 +461,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
     Generate next questions correctly when tag and level are wrong
     """
     def test_next_questions_with_fixed_level_wrong_tag_level(self):
-        count = self.client.session[self.client.session['q_token']]
+        count = self.client.session[self.client.session[ss.Q_TOKEN]]
         self.qids = self.all_qid
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, 'not_exist', -1, count)
         self.assertEqual(len(actual), 0)
