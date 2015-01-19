@@ -30,6 +30,7 @@ class ErrInfo:
 
 err = {
     'OK': ErrInfo(0, ''),
-    'NOT_EXIST': ErrInfo(1, 'not exist'),
+    'ERROR': ErrInfo(1, 'has error'),
+    'NOT_EXIST': ErrInfo(2, 'not exist'),
 }
 

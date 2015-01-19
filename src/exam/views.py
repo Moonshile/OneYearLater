@@ -58,10 +58,11 @@ def getQuestions(request):
     tag = request.GET['t'] if 't' in request.GET else None
     level = request.GET['l'] if 'l' in request.GET else None
     category = getCachedCategory(request.session[ss.CATEGORY_NAME])
-    qids = request.session.get(ss.QUESTION_IDS, [])
+    qids = request.session.get(ss.QUESTION_IDS, {})
     # get randomly not repeated questions with certain tag, level and count
     qs = nextQuestions(qids, category, tag, level, count)
-    qids += map(lambda x: x['id'], qs)
+    for q in qs:
+        qids[q['id']] = q_token
     q_token = genQtoken()
     enough_correct = len(request.session.get(ss.ANSWERS, [])) >= category['n_min']
     enough_questions = len(qids) >= category['n_max']

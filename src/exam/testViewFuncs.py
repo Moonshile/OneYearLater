@@ -188,7 +188,7 @@ class NextQuestionsWithRandomTagLevelTests(TestCase):
     def setUp(self):
         self.data = commonSetUp()
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, {})
         self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid = map(
             lambda q: q['id'],
@@ -248,7 +248,7 @@ class NextQuestionsWithRandomTagTests(TestCase):
         self.data = commonSetUp()
         self.level = 0
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, {})
         self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_level = map(
             lambda q: q['id'],
@@ -331,7 +331,7 @@ class NextQuestionsWithRandomLevelTests(TestCase):
         self.data = commonSetUp()
         self.tag = self.data[0]['tags'][0]['name']
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, {})
         self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_tag = map(
             lambda q: q['id'],
@@ -405,7 +405,7 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
         self.tag = self.data[0]['tags'][0]['name']
         self.level = 0
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
-        self.qids = self.client.session.get(ss.QUESTION_IDS, [])
+        self.qids = self.client.session.get(ss.QUESTION_IDS, {})
         self.category = getCachedCategory(self.client.session[ss.CATEGORY_NAME])
         self.all_qid_with_tag_level = map(
             lambda q: q['id'],

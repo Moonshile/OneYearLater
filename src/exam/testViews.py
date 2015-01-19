@@ -323,10 +323,9 @@ class GetQuestionsTests(TestCase):
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         q_token = self.client.session[ss.Q_TOKEN]
         # hack the total qids in session
-        qid = Question.objects.all()[0].id
-        qids_session = []
+        qids_session = {}
         for i in range(0, self.data[0]['n_max']):
-            qids_session.append(qid)
+            qids_session[i] = q_token
         self.hackSession(ss.QUESTION_IDS, qids_session)
         # assert
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
@@ -352,5 +351,37 @@ class GetQuestionsTests(TestCase):
         # assert
         response = self.client.get(reverse(getQuestions), {'l': level, 't': tag, 'q_token': q_token})
         self.assertEqual(response.status_code, not_found_code)
+
+class HandInAnswerTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+        self.category_name = self.data[0]['name']
+        self.client.get(reverse(getTags), {'c': self.category_name})
+        q_token = self.client.session[ss.Q_TOKEN]
+
+    """
+    hand in answer with wrong answer id
+    """
+    def test_hand_in_answer_with_wrong_id(self):
+        pass
+
+    """
+    hand in answer with wrong cost_time
+    """
+    def test_hand_in_answer_with_wrong_cost_time(self):
+        pass
+
+    """
+    hand in answer with wrong q_token
+    """
+    def test_hand_in_answer_with_wrong_q_token(self):
+        pass
+
+    """
+    hand in answer correctly
+    """
+    def test_hand_in_answer_correctly(self):
+        pass
 
 
