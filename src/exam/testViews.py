@@ -79,7 +79,7 @@ class GetQuestionsTests(TestCase):
         self.client.get(reverse(getTags), {'c': self.data[0]['name']})
         self.client.session.clear()
 
-    def assertCommon(self, actual_dict, expect_err_str):
+    def assertCommon(self, actual_dict, expect_err_str, tag=None, level=None):
         expect_err = err[expect_err_str]
         actual = actual_dict
         expect_q_token = self.client.session['q_token']
@@ -93,6 +93,19 @@ class GetQuestionsTests(TestCase):
         for q in actual['questions']:
             self.assertEqual(q['id'] not in qs, True)
             qs.append(q['id'])
+        # the actual questions are correct
+        for q in actual['questions']:
+            if level:
+                self.assertEqual(q['level'], expect_level)
+            q_in_questions = reduce(
+                lambda res, t: res or q in t['questions'],
+                filter(
+                    lambda t: not tag or t['name'] == tag,
+                    self.data[0]['tags']
+                ),
+                False
+            )
+            self.assertEqual(q_in_questions, True)
 
     def hackSession(self, key, value):
         session = self.client.session
@@ -110,11 +123,6 @@ class GetQuestionsTests(TestCase):
             response = self.client.get(reverse(getQuestions), {'q_token': q_token})
             actual = json.loads(response.content)
             self.assertCommon(actual_dict=actual, expect_err_str='OK')
-            for q in actual['questions']:
-                actual_q = False
-                for t in self.data[0]['tags']:
-                    actual_q = actual_q or q in t['questions']
-                self.assertEqual(actual_q, True)
             q_token = self.client.session['q_token']
 
     """
@@ -129,13 +137,7 @@ class GetQuestionsTests(TestCase):
             expect_count = self.client.session[self.client.session['q_token']]
             response = self.client.get(reverse(getQuestions), {'l': expect_level, 'q_token': q_token})
             actual = json.loads(response.content)
-            self.assertCommon(actual_dict=actual, expect_err_str='OK')
-            for q in actual['questions']:
-                actual_q = False
-                self.assertEqual(q['level'], expect_level)
-                for t in self.data[0]['tags']:
-                    actual_q = actual_q or q in t['questions']
-                self.assertEqual(actual_q, True)
+            self.assertCommon(actual_dict=actual, expect_err_str='OK', level=expect_level)
             q_token = self.client.session['q_token']
 
     """
@@ -150,14 +152,7 @@ class GetQuestionsTests(TestCase):
             expect_count = self.client.session[self.client.session['q_token']]
             response = self.client.get(reverse(getQuestions), {'t': expect_tag, 'q_token': q_token})
             actual = json.loads(response.content)
-            self.assertCommon(actual_dict=actual, expect_err_str='OK')
-            for q in actual['questions']:
-                actual_q = False
-                for t in self.data[0]['tags']:
-                    if t['name'] != expect_tag:
-                        pass
-                    actual_q = actual_q or q in t['questions']
-                self.assertEqual(actual_q, True)
+            self.assertCommon(actual_dict=actual, expect_err_str='OK', tag=expect_tag)
             q_token = self.client.session['q_token']
 
     """
@@ -173,15 +168,7 @@ class GetQuestionsTests(TestCase):
             expect_count = self.client.session[self.client.session['q_token']]
             response = self.client.get(reverse(getQuestions), {'t': expect_tag, 'l': expect_level, 'q_token': q_token})
             actual = json.loads(response.content)
-            self.assertCommon(actual_dict=actual, expect_err_str='OK')
-            for q in actual['questions']:
-                actual_q = False
-                self.assertEqual(q['level'], expect_level)
-                for t in self.data[0]['tags']:
-                    if t['name'] != expect_tag:
-                        pass
-                    actual_q = actual_q or q in t['questions']
-                self.assertEqual(actual_q, True)
+            self.assertCommon(actual_dict=actual, expect_err_str='OK', tag=expect_tag, level=expect_level)
             q_token = self.client.session['q_token']
 
     """
@@ -263,11 +250,6 @@ class GetQuestionsTests(TestCase):
         response = self.client.get(reverse(getQuestions), {'q_token': q_token})
         actual = json.loads(response.content)
         self.assertCommon(actual_dict=actual, expect_err_str='OK')
-        for q in actual['questions']:
-            actual_q = False
-            for t in self.data[0]['tags']:
-                actual_q = actual_q or q in t['questions']
-            self.assertEqual(actual_q, True)
         self.assertEqual(len(actual['questions']), expect_count)
         q_token = self.client.session['q_token']
         self.assertEqual(self.client.session[q_token], 0)
@@ -326,15 +308,7 @@ class GetQuestionsTests(TestCase):
         actual = json.loads(response.content)
         q_token = self.client.session['q_token']
         self.assertEqual(self.client.session[q_token], 0)
-        self.assertCommon(actual_dict=actual, expect_err_str='OK')
-        for q in actual['questions']:
-            actual_q = False
-            self.assertEqual(q['level'], expect_level)
-            for t in self.data[0]['tags']:
-                if t['name'] != expect_tag:
-                    pass
-                actual_q = actual_q or q in t['questions']
-            self.assertEqual(actual_q, True)
+        self.assertCommon(actual_dict=actual, expect_err_str='OK', tag=tag, level=level)
 
     """
     Get last question with having answered max number of questions
@@ -358,15 +332,7 @@ class GetQuestionsTests(TestCase):
         actual = json.loads(response.content)
         q_token = self.client.session['q_token']
         self.assertEqual(self.client.session[q_token], 0)
-        self.assertCommon(actual_dict=actual, expect_err_str='OK')
-        for q in actual['questions']:
-            actual_q = False
-            self.assertEqual(q['level'], expect_level)
-            for t in self.data[0]['tags']:
-                if t['name'] != expect_tag:
-                    pass
-                actual_q = actual_q or q in t['questions']
-            self.assertEqual(actual_q, True)
+        self.assertCommon(actual_dict=actual, expect_err_str='OK', tag=tag, level=level)
 
     """
     Get questions with q_token bound with 0
