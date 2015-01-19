@@ -77,3 +77,68 @@ def getCachedTagCategoryMap():
 def genQtoken():
     return string.join(random.sample(RAND_STR_BASE, 6)).replace(' ' , '')
 
+def nextQuestionsWithRandomTagLevel(qids, category, count):
+    questions = reduce(
+        lambda res, x: res + filter(
+            lambda x: x['id'] not in qids,
+            x['questions']
+        ),
+        category['tags'],
+        []
+    )
+    if len(questions) <= count:
+        return questions
+    return random.sample(questions, count)
+
+def nextQuestionsWithRandomTag(qids, category, level, count):
+    questions = reduce(
+        lambda res, x: res + filter(
+            lambda x: x['level'] == level and x['id'] not in qids,
+            x['questions']
+        ),
+        category['tags'],
+        []
+    )
+    if len(questions) <= count:
+        return questions
+    return random.sample(questions, count)
+
+def nextQuestionsWithRandomLevel(qids, category, tag, count):
+    questions = filter(
+        lambda q: q['id'] not in qids,
+        reduce(
+            lambda res, t: res + t['questions'],
+            filter(lambda t: t['name'] == tag, category['tags']),
+            []
+        )
+    )
+    if len(questions) <= count:
+        return questions
+    return random.sample(questions, count)
+
+def nextQuestionsWithFixedTagLevel(qids, category, tag, level, count):
+    questions = filter(
+        lambda q: q['level'] == level and q['id'] not in qids,
+        reduce(
+            lambda res, t: res + t['questions'],
+            filter(lambda t: t['name'] == tag, category['tags']),
+            []
+        )
+    )
+    if len(questions) <= count:
+        return questions
+    return random.sample(questions, count)
+
+"""
+generate next not repeated questions randomly
+"""
+def nextQuestions(qids, category, tag=None, level=None, count=1):
+    if tag is None and level is None:
+        return nextQuestionsWithRandomTagLevel(qids, category, count)
+    if tag is None:
+        return nextQuestionsWithRandomTag(qids, category, level, count)
+    if level is None:
+        return nextQuestionsWithRandomLevel(qids, category, tag, count)
+    return nextQuestionsWithFixedTagLevel(qids, category, tag, level, count)
+
+
