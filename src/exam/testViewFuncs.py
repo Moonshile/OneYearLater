@@ -117,7 +117,6 @@ class GetCachedCategoryTests(TestCase):
 class GetCachedTagCategoryMapTests(TestCase):
 
     def setUp(self):
-        cache.clear()
         self.data = commonSetUp()
 
     """
@@ -132,11 +131,36 @@ class GetCachedTagCategoryMapTests(TestCase):
                 self.assertEqual(actual, expect)
 
     """
-    The map is in cached
+    The map is cached
     """
     def test_got_tag_category_map_is_in_cache(self):
         expect = getCachedTagCategoryMap()
         actual = cache.get(cc.TAG_CATEGORY_MAP)
+        self.assertEqual(actual, expect)
+
+class GetCachedOptionalAnswersTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+
+    """
+    Get correct optional answers
+    """
+    def test_get_correct_cached_optional_answers(self):
+        op_ans = getCachedOptionalAnswers()
+        for c in self.data:
+            for t in c['tags']:
+                for q in t['questions']:
+                    for a in q['op_ans']:
+                        self.assertEqual(op_ans[a['id']]['is_sln'], a['is_sln'])
+                        self.assertEqual(op_ans[a['id']]['qid'], q['id'])
+
+    """
+    The optional answers are cached
+    """
+    def test_got_optional_answers_are_cached(self):
+        expect = getCachedOptionalAnswers()
+        actual = cache.get(cc.OPTIONAL_ANSWERS)
         self.assertEqual(actual, expect)
 
 class GenQtokenTests(TestCase):

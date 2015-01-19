@@ -73,6 +73,19 @@ def getCachedTagCategoryMap():
     cache.set(cc.TAG_CATEGORY_MAP, m)
     return m
 
+def getCachedOptionalAnswers():
+    op_ans = cache.get(cc.OPTIONAL_ANSWERS)
+    if op_ans:
+        return op_ans
+    answers = OptionalAnswer.objects.all()
+    op_ans = {}
+    for a in answers:
+        op_ans[a.id] = {}
+        op_ans[a.id]['is_sln'] = a.is_solution
+        op_ans[a.id]['qid'] = a.question.id
+    cache.set(cc.OPTIONAL_ANSWERS, op_ans)
+    return op_ans
+
 # generate a 6-charater random string
 def genQtoken():
     return string.join(random.sample(RAND_STR_BASE, 6)).replace(' ' , '')
@@ -140,5 +153,4 @@ def nextQuestions(qids, category, tag=None, level=None, count=1):
     if level is None:
         return nextQuestionsWithRandomLevel(qids, category, tag, count)
     return nextQuestionsWithFixedTagLevel(qids, category, tag, level, count)
-
 

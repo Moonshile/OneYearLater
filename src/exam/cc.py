@@ -5,3 +5,6 @@
 CATEGORY_BASE = 'category'
 
 TAG_CATEGORY_MAP = 'tag_ctg_map'
+
+OPTIONAL_ANSWERS = 'op_ans'
+
