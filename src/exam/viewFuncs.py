@@ -1,6 +1,6 @@
 
 from django.core.cache import cache
-import random, string
+import random, string, math
 
 from exam import cc
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
@@ -154,4 +154,20 @@ def nextQuestions(qids, category, tag=None, level=None, count=1):
     if level is None:
         return nextQuestionsWithRandomLevel(qids, category, tag, count)
     return nextQuestionsWithFixedTagLevel(qids, category, tag, level, count)
+
+"""
+compute score
+"""
+def computeScore(category, ans):
+    step = category['v_step']
+    base = category['v_base']
+    free_time = category['free_time']
+    max_time = category['max_time']
+    score = 0.0
+    for a in ans:
+        time = 0 if a['time'] < free_time else (max_time if max_time < a['time'] else a['time'] - free_time)
+        score += (step*a['level'] + base)*math.exp(-0.05*(time if a['is_sln'] else 2*max_time))
+    return score
+
+
 

@@ -490,6 +490,36 @@ class NextQuestionsWithFixedTagLevelTests(TestCase):
         actual = nextQuestionsWithFixedTagLevel(self.qids, self.category, 'not_exist', -1, count)
         self.assertEqual(len(actual), 0)
 
+class ComputeScoreTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+        self.ans = []
+        for i in range(0, 100):
+            ans = []
+            for i in range(0, 12):
+                a = {}
+                a['level'] = random.randint(0, 5)
+                a['time'] = random.randint(0, 10*a['level'])
+                a['is_sln'] = True if random.randint(0, 5 + a['level']) in range(0, 3) else False
+                ans.append(a)
+            self.ans.append(ans)
+
+    """
+    test compute score
+    """
+    def test_compute_score(self):
+        ans = self.ans
+        for a in ans:
+            score = computeScore(self.data[0], a)
+            self.assertEqual(type(score), float)
+        print_scores = False
+        if print_scores:
+            scores = map(lambda x: (int(10000*computeScore(self.data[0], x)))/10000, ans)
+            print sorted(scores)
+            print 'max', reduce(lambda res, x: x if x > res else res, scores, 0)
+            print 'min', reduce(lambda res, x: x if x < res else res, scores, 1000)
+            print 'mean', reduce(lambda res, x: res+x, scores, 0)/len(scores)
 
 
 

@@ -64,7 +64,7 @@ def getQuestions(request):
     # get randomly not repeated questions with certain tag, level and count
     qs = nextQuestions(qids, category, tag, level, count)
     for q in qs:
-        qids[q['id']] = q_token
+        qids[q['id']] = (q_token, q['level'])
     q_token = genQtoken()
     enough_correct = len(request.session.get(ss.ANSWERS, [])) >= category['n_min']
     enough_questions = len(qids) >= category['n_max']
@@ -94,7 +94,13 @@ def handInAnswer(request):
         })
     ans = request.session.get(ss.ANSWERS, [])
     cd = form.cleaned_data
-    ans.append({'id': cd['id'], 'time': cd['time'], 'is_sln': cached_op_ans[cd['id']]['is_sln']})
+    cached_ans = cached_op_ans[cd['id']]
+    ans.append({
+        'id': cd['id'], 
+        'time': cd['time'], 
+        'is_sln': cached_ans['is_sln'],
+        'level': qids[cached_ans['qid']][1]
+    })
     request.session[ss.ANSWERS] = ans
     return JsonResponse({'err_code': err['OK'].code, 'err_msg': err['OK'].msg})
 

@@ -11,10 +11,10 @@ def commonSetUp():
         'n_next_batch': 1,
         'n_min': 10,
         'n_max': 15,
-        'v_step': 1,
-        'v_base': 5,
-        'free_time': 8,
-        'max_time': 18,
+        'v_step': 2,
+        'v_base': 3,
+        'free_time': 10,
+        'max_time': 32,
         'tags': [{
             'name': 'C', 
             'questions': [

@@ -27,6 +27,6 @@ class HandInAnswerForm(forms.Form):
     def clean_q_token(self):
         q_token = self.cleaned_data['q_token']
         id = self.cleaned_data.get('id', None)
-        if id and self.qids[self.op_ans[id]['qid']] == q_token:
+        if id and self.qids[self.op_ans[id]['qid']][0] == q_token:
             return q_token
         raise forms.ValidationError('q_token')

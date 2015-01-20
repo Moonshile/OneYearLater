@@ -387,7 +387,7 @@ class HandInAnswerTests(TestCase):
     """
     def test_hand_in_answer_with_wrong_id(self):
         a = self.op_ans[0]
-        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']]
+        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']][0]
         response = self.client.post(reverse(handInAnswer), {'id': -1, 'time': 10, 'q_token': q_token})
         actual = json.loads(response.content)
         self.assertEqual(actual['err_code'], err['ERROR'].code)
@@ -398,7 +398,7 @@ class HandInAnswerTests(TestCase):
     """
     def test_hand_in_answer_with_wrong_cost_time(self):
         a = self.op_ans[0]
-        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']]
+        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']][0]
         response = self.client.post(reverse(handInAnswer), {'id': a['id'], 'time': -1, 'q_token': q_token})
         actual = json.loads(response.content)
         self.assertEqual(actual['err_code'], err['ERROR'].code)
@@ -419,7 +419,7 @@ class HandInAnswerTests(TestCase):
     """
     def test_hand_in_answer_correctly(self):
         a = self.op_ans[0]
-        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']]
+        q_token = self.client.session[ss.QUESTION_IDS][self.cached_op_ans[a['id']]['qid']][0]
         response = self.client.post(reverse(handInAnswer), {'id': a['id'], 'time': 10, 'q_token': q_token})
         actual = json.loads(response.content)
         self.assertEqual(actual['err_code'], err['OK'].code)
