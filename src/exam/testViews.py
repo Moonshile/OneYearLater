@@ -6,7 +6,7 @@ import json
 
 from exam import ss
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
-from exam.views import getTags, getQuestions, handInAnswer, finishAnswer
+from exam.views import *
 from exam.viewFuncs import *
 from exam.tests import commonSetUp
 from forever.const import err, REQ_FREQUENCY_LIMIT
@@ -425,5 +425,55 @@ class HandInAnswerTests(TestCase):
         self.assertEqual(actual['err_code'], err['OK'].code)
         self.assertEqual(actual['err_msg'], err['OK'].msg)
         self.assertEqual(a['id'] in map(lambda x: x['id'], self.client.session[ss.ANSWERS]), True)
+
+class FinishAnswerTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+        self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        q_token = self.client.session[ss.Q_TOKEN]
+        session = self.client.session
+        session[q_token] = 20
+        session.save()
+        response = self.client.get(reverse(getQuestions), {'q_token': q_token})
+        response_data = json.loads(response.content)
+        self.q_token = self.client.session[ss.Q_TOKEN]
+        self.assertEqual(len(response_data['questions']), 20)
+        self.assertEqual(self.client.session[self.q_token], 0)
+
+    """
+    finish with wrong methods
+    Should not allow
+    """
+    def test_finish_answer_with_wrong_methods(self):
+        not_allowed = 405
+        response = self.client.get(reverse(finishAnswer), {'q_token': self.q_token})
+        self.assertEqual(response.status_code, not_allowed)
+        response = self.client.delete(reverse(finishAnswer), {'id': 0, 'time': 10, 'q_token': self.q_token})
+        self.assertEqual(response.status_code, not_allowed)
+        response = self.client.head(reverse(finishAnswer), {'q_token': self.q_token})
+        self.assertEqual(response.status_code, not_allowed)
+        response = self.client.put(reverse(finishAnswer), {'time': 10, 'q_token': self.q_token})
+        self.assertEqual(response.status_code, not_allowed)
+        response = self.client.patch(reverse(finishAnswer), {'id': 0, 'time': 10, 'q_token': self.q_token})
+        self.assertEqual(response.status_code, not_allowed)
+
+    """
+    finish with correct q_token
+    """
+    def test_finish_answer_correctly(self):
+        response = self.client.post(reverse(finishAnswer), {'q_token': self.q_token})
+        actual = json.loads(response.content)
+        self.assertEqual(actual['err_code'], err['OK'].code)
+
+    """
+    finish with wrong q_token
+    Should not allow
+    """
+    def test_finish_answer_with_wrong_q_token(self):
+        forbidden = 403
+        response = self.client.post(reverse(finishAnswer), {'q_token': 'not_exist'})
+        self.assertEqual(response.status_code, forbidden)
+
 
 

@@ -30,3 +30,16 @@ class HandInAnswerForm(forms.Form):
         if id and self.qids[self.op_ans[id]['qid']][0] == q_token:
             return q_token
         raise forms.ValidationError('q_token')
+
+class FinishAnswerForm(forms.Form):
+    q_token = forms.CharField()
+
+    def __init__(self, post, session):
+        forms.Form.__init__(self, post)
+        self.session = session
+
+    def clean_q_token(self):
+        q_token = self.cleaned_data['q_token']
+        if self.session.get(q_token, None) == 0:
+            return q_token
+        raise forms.ValidationError('q_token')

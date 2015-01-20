@@ -22,6 +22,9 @@ RAND_STR_BASE = '1234567890QWERTYUIOPLKJHGFDSAZXCVBNM'
 # oldest age in our site
 OLDEST = 128
 
+# threshold amount of access
+THETA_NUM = 1000
+
 # err code information
 class ErrInfo:
     def __init__(self, code, msg):

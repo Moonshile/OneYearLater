@@ -67,13 +67,11 @@ class OptionalAnswer(models.Model):
 
 # a user could attend exam again and again
 class AnswerSheet(models.Model):
-    owner = models.ForeignKey(User, null=True)
+    owner = models.ForeignKey(User, null=True, default=None)
     # associated with id, but visible to users
     # with this, users could get their report
-    token = models.CharField(max_length=16)
+    token = models.CharField(max_length=8, unique=True)
     time = models.DateTimeField(auto_now_add=True)
-    # skill experience of this user, smaller is inexperienced
-    experience = models.SmallIntegerField(default=0)
     # score, is read only, so could be saved into db
     score = models.PositiveIntegerField(default=0, db_index=True)
     
@@ -89,7 +87,7 @@ class AnswerSheet(models.Model):
 class Answer(models.Model):
     answer_sheet = models.ForeignKey(AnswerSheet)
     choosed_answer = models.ForeignKey(OptionalAnswer)
-    # level of cost time for answer this question, from 0 to 10 (s)
+    # level of cost time for answer this question
     cost_time = models.SmallIntegerField(default=0)
 
     def __unicode__(self):

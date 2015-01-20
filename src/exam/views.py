@@ -82,7 +82,7 @@ def getQuestions(request):
     request.session[ss.QUESTION_IDS] = qids
     return JsonResponse(res)
 
-@require_http_methods(["POST"])
+@require_http_methods(['POST'])
 def handInAnswer(request):
     cached_op_ans = getCachedOptionalAnswers()
     qids = request.session[ss.QUESTION_IDS]
@@ -104,14 +104,33 @@ def handInAnswer(request):
     request.session[ss.ANSWERS] = ans
     return JsonResponse({'err_code': err['OK'].code, 'err_msg': err['OK'].msg})
 
+@require_http_methods(['POST'])
 def finishAnswer(request):
+    form = FinishAnswerForm(request.POST, request.session)
+    if not form.is_valid():
+        raise PermissionDenied
+    user = request.user if request.user.is_authenticated() else None
+    category = getCachedCategory(request.session[ss.CATEGORY_NAME])
+    answers = request.session.get(ss.ANSWERS, [])
+    token = genQtoken(8)
+    while AnswerSheet.objects.filter(token=token).count() > 0:
+        token = genQtoken(8)
+    answer_sheet = AnswerSheet.objects.create(owner=user, token=token, score=computeScore(category, answers))
+    rank = AnswerSheet.objects.filter(score__lte=answer_sheet.score).count()
+    total = AnswerSheet.objects.count()
     res = {
-        'err_code': 0,
-        'err_msg': '',
-        'rank': {'No.': 1, 'rate': .9},
-        'answer_sheet': {'token': '', id: '', 'score': 0},
-        'share_url': '',
+        'err_code': err['OK'].code,
+        'err_msg': err['OK'].msg,
+        'rank': {'No.': rank, 'ratio': computeRatio(rank, total, answer_sheet.score)},
+        'answer_sheet': {'token': answer_sheet.token, 'score': answer_sheet.score},
     }
     return JsonResponse(res)
+
+def queryAnswerSheet(request):
+    pass
+
+
+def share(request):
+    pass
 
 
