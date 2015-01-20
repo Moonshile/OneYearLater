@@ -81,7 +81,7 @@ class AnswerSheet(models.Model):
         return self.token
 
     def __unicode__(self):
-        return self.owner.username + '\'s answer sheet'
+        return self.owner.username + '\'s answer sheet' if self.owner else 'Someone\'s answer sheet'
 
 # actual answers in answer sheets
 class Answer(models.Model):
@@ -91,5 +91,5 @@ class Answer(models.Model):
     cost_time = models.SmallIntegerField(default=0)
 
     def __unicode__(self):
-        return self.answer_sheet.owner.username + '\'s answer'
+        return self.answer_sheet.owner.username + '\'s answer' if self.answer_sheet.owner else 'Someone\' answer'
 

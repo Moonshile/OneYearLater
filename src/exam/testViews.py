@@ -86,6 +86,7 @@ class GetQuestionsTests(TestCase):
         actual = actual_dict
         expect_q_token = self.client.session[ss.Q_TOKEN]
         expect_has_next = True if self.client.session[expect_q_token] else False
+        qids = self.client.session[ss.QUESTION_IDS]
         self.assertEqual(actual['err_code'], expect_err.code)
         self.assertEqual(actual['err_msg'], expect_err.msg)
         self.assertEqual(actual['q_token'], expect_q_token)
@@ -108,6 +109,8 @@ class GetQuestionsTests(TestCase):
                 False
             )
             self.assertEqual(q_in_questions, True)
+            # bound correct q_token
+            self.assertEqual(qids[q['id']][0], expect_q_token)
 
     def hackSession(self, key, value):
         session = self.client.session
@@ -440,6 +443,13 @@ class FinishAnswerTests(TestCase):
         self.q_token = self.client.session[ss.Q_TOKEN]
         self.assertEqual(len(response_data['questions']), 20)
         self.assertEqual(self.client.session[self.q_token], 0)
+        self.choosed_ans = map(lambda q: { 
+            'id': q['op_ans'][0]['id'],
+            'time': random.randint(0, 100), 
+            'q_token': response_data['q_token']
+        }, filter(lambda q: len(q['op_ans']) > 0, response_data['questions']))
+        for a in self.choosed_ans:
+            self.client.post(reverse(handInAnswer), a)
 
     """
     finish with wrong methods
@@ -464,6 +474,8 @@ class FinishAnswerTests(TestCase):
     def test_finish_answer_correctly(self):
         response = self.client.post(reverse(finishAnswer), {'q_token': self.q_token})
         actual = json.loads(response.content)
+        for a in self.choosed_ans:
+            self.assertEqual(Answer.objects.filter(choosed_answer_id=a['id']).count() > 0, True)
         self.assertEqual(actual['err_code'], err['OK'].code)
 
     """

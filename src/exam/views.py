@@ -57,6 +57,7 @@ def getQuestions(request):
     # q_token bound with 0: not found
     if count == 0:
         raise Http404
+    q_token = genQtoken()
     tag = request.GET.get('t', None)
     level = request.GET.get('l', None)
     category = getCachedCategory(request.session[ss.CATEGORY_NAME])
@@ -65,7 +66,6 @@ def getQuestions(request):
     qs = nextQuestions(qids, category, tag, level, count)
     for q in qs:
         qids[q['id']] = (q_token, q['level'])
-    q_token = genQtoken()
     enough_correct = len(request.session.get(ss.ANSWERS, [])) >= category['n_min']
     enough_questions = len(qids) >= category['n_max']
     no_more = reduce(lambda res, t: res + len(t['questions']), category['tags'], 0) <= len(qids)
@@ -116,6 +116,8 @@ def finishAnswer(request):
     while AnswerSheet.objects.filter(token=token).count() > 0:
         token = genQtoken(8)
     answer_sheet = AnswerSheet.objects.create(owner=user, token=token, score=computeScore(category, answers))
+    for a in answers:
+        Answer.objects.create(answer_sheet=answer_sheet, choosed_answer_id=a['id'], cost_time=a['time'])
     rank = AnswerSheet.objects.filter(score__lte=answer_sheet.score).count()
     total = AnswerSheet.objects.count()
     res = {
