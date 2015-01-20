@@ -16,6 +16,11 @@ class Category(models.Model):
     n_min = models.SmallIntegerField(default=10)
     # else if user has answered this number of questions totally, then finish
     n_max = models.SmallIntegerField(default=15)
+    # value of a questions is level*v_step + v_base
+    v_step = models.SmallIntegerField(default=0)
+    v_base = models.SmallIntegerField(default=0)
+    # free time is the time for user to prepare and understand a question
+    free_time = models.SmallIntegerField(default=0)
 
     def __unicode__(self):
         return self.name
@@ -68,7 +73,7 @@ class AnswerSheet(models.Model):
     # skill experience of this user, smaller is inexperienced
     experience = models.SmallIntegerField(default=0)
     # score, is read only, so could be saved into db
-    score = models.PositiveIntegerField(default=0)
+    score = models.PositiveIntegerField(default=0, db_index=True)
     
     def generateToken(self):
         self.token = hex(self.id + 10000000)[2:]
