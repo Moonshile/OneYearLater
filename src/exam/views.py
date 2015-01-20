@@ -4,12 +4,14 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 from django.core.exceptions import PermissionDenied
 from django.core.cache import cache
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_http_methods
 from django.conf import settings
 import random, string
 
-from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
-from exam.viewFuncs import getCachedCategory, genQtoken, nextQuestions
 from exam import ss, cc
+from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
+from exam.viewFuncs import *
+from exam.forms import *
 from forever.const import err, RAND_STR_BASE, REQ_FREQUENCY_LIMIT
 from forever.settings import DEBUG
 
@@ -47,7 +49,7 @@ def getTags(request):
 
 def getQuestions(request):
     q_token = request.session.get(ss.Q_TOKEN, None)
-    q_token_get = request.GET['q_token'] if 'q_token' in request.GET else None
+    q_token_get = request.GET.get('q_token', None)
     # wrong q_token: forbidden
     if not q_token or q_token != q_token_get or ss.CATEGORY_NAME not in request.session:
         raise PermissionDenied
@@ -55,8 +57,8 @@ def getQuestions(request):
     # q_token bound with 0: not found
     if count == 0:
         raise Http404
-    tag = request.GET['t'] if 't' in request.GET else None
-    level = request.GET['l'] if 'l' in request.GET else None
+    tag = request.GET.get('t', None)
+    level = request.GET.get('l', None)
     category = getCachedCategory(request.session[ss.CATEGORY_NAME])
     qids = request.session.get(ss.QUESTION_IDS, {})
     # get randomly not repeated questions with certain tag, level and count
@@ -80,12 +82,21 @@ def getQuestions(request):
     request.session[ss.QUESTION_IDS] = qids
     return JsonResponse(res)
 
+@require_http_methods(["POST"])
 def handInAnswer(request):
-    res = {
-        'err_code': 0,
-        'err_msg': '',
-    }
-    return JsonResponse(res)
+    cached_op_ans = getCachedOptionalAnswers()
+    qids = request.session[ss.QUESTION_IDS]
+    form = HandInAnswerForm(request.POST, cached_op_ans, qids)
+    if not form.is_valid():
+        return JsonResponse({
+            'err_code': err['ERROR'].code, 
+            'err_msg': map(lambda x: x + ' ' + err['ERROR'].msg, form.errors.keys())
+        })
+    ans = request.session.get(ss.ANSWERS, [])
+    cd = form.cleaned_data
+    ans.append({'id': cd['id'], 'time': cd['time'], 'is_sln': cached_op_ans[cd['id']]['is_sln']})
+    request.session[ss.ANSWERS] = ans
+    return JsonResponse({'err_code': err['OK'].code, 'err_msg': err['OK'].msg})
 
 def finishAnswer(request):
     res = {
