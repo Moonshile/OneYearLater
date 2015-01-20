@@ -4,7 +4,7 @@ import random, string, math
 
 from exam import cc
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
-from forever.const import RAND_STR_BASE
+from forever.const import RAND_STR_BASE, THETA_NUM
 
 def getOptionalAnswersOfQuestion(question):
     ans = []
@@ -88,8 +88,8 @@ def getCachedOptionalAnswers():
     return op_ans
 
 # generate a 6-charater random string
-def genQtoken():
-    return string.join(random.sample(RAND_STR_BASE, 6)).replace(' ' , '')
+def genQtoken(length=6):
+    return string.join(random.sample(RAND_STR_BASE, length)).replace(' ' , '')
 
 def nextQuestionsWithRandomTagLevel(qids, category, count):
     questions = reduce(
@@ -169,5 +169,13 @@ def computeScore(category, ans):
         score += (step*a['level'] + base)*math.exp(-0.05*(time if a['is_sln'] else 2*max_time))
     return score
 
+"""
+compute ratio of scores lower than a score
+"""
+SAL_DIST = filter(lambda x: x >= 5 and x <= 100, map(lambda x: int(random.normalvariate(15, 15)), range(0,1000)))
+def computeRatio(rank, total, score):
+    if total > THETA_NUM:
+        return rank/float(total)
+    return len(filter(lambda x: x <= score, SAL_DIST))/float(len(SAL_DIST))
 
 
