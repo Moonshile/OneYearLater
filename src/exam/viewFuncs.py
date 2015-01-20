@@ -56,7 +56,7 @@ def getCachedCategory(category_name):
     category = {'id': c.id, 'name': c.name, 
         'n_first_batch': c.n_first_batch, 'n_next_batch': c.n_next_batch,
         'n_min': c.n_min, 'n_max': c.n_max,
-        'v_step': c.v_step, 'v_base': c.v_base, 'free_time': c.free_time,
+        'v_step': c.v_step, 'v_base': c.v_base, 'free_time': c.free_time, 'max_time': c.max_time,
         'tags': getTagsInCategory(c)
     }
     cache.set(key, category)

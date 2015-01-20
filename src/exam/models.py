@@ -21,6 +21,8 @@ class Category(models.Model):
     v_base = models.SmallIntegerField(default=0)
     # free time is the time for user to prepare and understand a question
     free_time = models.SmallIntegerField(default=0)
+    # if a question cost time more than max_time, then treat it as max_time
+    max_time = models.SmallIntegerField(default=0)
 
     def __unicode__(self):
         return self.name

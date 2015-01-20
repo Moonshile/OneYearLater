@@ -14,6 +14,7 @@ def commonSetUp():
         'v_step': 1,
         'v_base': 5,
         'free_time': 8,
+        'max_time': 18,
         'tags': [{
             'name': 'C', 
             'questions': [
@@ -172,13 +173,14 @@ def commonSetUp():
         'v_step': 1,
         'v_base': 5,
         'free_time': 8,
+        'max_time': 18,
         'tags': [],
     },]
     for c in data:
         category = Category.objects.create(name=c['name'], n_min=c['n_min'], n_max=c['n_max'],
             n_first_batch=c['n_first_batch'], n_next_batch=c['n_next_batch'],
             v_step=c['v_step'], v_base=c['v_base'],
-            free_time=c['free_time'],
+            free_time=c['free_time'], max_time=c['max_time']
         )
         c['id'] = category.id
         for t in c['tags']:
