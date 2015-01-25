@@ -1,0 +1,33 @@
+
+/* css for mobile */
+
+.page {
+  text-align: center;
+}
+
+.page div {
+  text-align: left;
+}
+
+.page a {
+  color: #555;
+}
+
+.page .header {
+  margin: 50px;
+  text-align: center;
+}
+
+.page .footer {
+  position: absolute;
+  bottom: 0;
+  line-height: 1;
+  color: #333;
+  font-size: 12px;
+}
+
+.note {
+  color: #666;
+  font-size: 12px;
+  padding: 5px;
+}
