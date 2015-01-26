@@ -6,6 +6,19 @@ from exam import cc
 from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
 from forever.const import RAND_STR_BASE, THETA_NUM
 
+# decorator to cache returned value of func with key
+def with_cache(key):
+    def decorator(func):
+        def inner(*args):
+            value = cache.get(key)
+            if value:
+                return value
+            value = func(*args)
+            cache.set(key, value)
+            return value
+        return inner
+    return decorator
+
 def getOptionalAnswersOfQuestion(question):
     ans = []
     answers = question.optionalanswer_set.all()
