@@ -15,8 +15,9 @@ from exam.forms import *
 from forever.const import err, RAND_STR_BASE, REQ_FREQUENCY_LIMIT
 from forever.settings import DEBUG
 
+@ensure_csrf_cookie
 def index(request):
-    pass
+    return render_to_response('income.html')
 
 def getTags(request):
     # deal with too frequent requests from a user

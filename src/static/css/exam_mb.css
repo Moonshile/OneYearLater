@@ -21,6 +21,10 @@ body {
   color: #888;
 }
 
+.content .ans-list p {
+  cursor: pointer;
+}
+
 .btn-outline {
   background-color: transparent;
   border-color: #fff;
