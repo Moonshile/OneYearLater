@@ -1,0 +1,75 @@
+
+from django.test import TestCase, RequestFactory
+from django.core.urlresolvers import reverse
+from django.http import JsonResponse
+import json
+
+from exam import ss
+from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
+from exam.views import *
+from exam.viewFuncs import *
+from exam.tests import commonSetUp
+from forever.const import err, REQ_FREQUENCY_LIMIT
+
+class GetTagsTests(TestCase):
+
+    def setUp(self):
+        self.data = commonSetUp()
+
+    """
+    The request for get exist tags should return correct results
+    """
+    def test_get_tags_exist(self):
+        for c in self.data:
+            response = self.client.get(reverse(getTags), {'c': c['name']})
+            expect_tags = str(map(lambda t: {
+                'name': t['name'], 
+                'question_dist': t['question_dist']
+            }, c['tags'])).replace('\'', '\"')
+            expect = '''{
+                "err_code": %d, 
+                "err_msg": "%s", 
+                "tags": %s, 
+                "q_token": "%s"
+            }''' % (err['OK'].code, err['OK'].msg, expect_tags, self.client.session[ss.Q_TOKEN])
+            self.assertJSONEqual(response.content, expect)
+            self.assertEqual(self.client.session[self.client.session[ss.Q_TOKEN]], c['n_first_batch'])
+            self.assertEqual(self.client.session[ss.CATEGORY_NAME], c['name'])
+
+    """
+    The request for get tags in non-exist category
+    """
+    def test_get_tags_not_exist(self):
+        not_exist_category = 'not_exist_category'
+        response = self.client.get(reverse(getTags), {'c': not_exist_category})
+        expect = '''{
+            "err_code": %d,
+            "err_msg": ["category %s"]
+        }''' % (err['NOT_EXIST'].code, err['NOT_EXIST'].msg)
+        self.assertJSONEqual(response.content, expect)
+
+    """
+    Requests too frequently
+    """
+    def test_get_tags_too_frequently(self):
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        forbid_code = 403
+        for i in range(0, REQ_FREQUENCY_LIMIT + 1):
+            # within the permitted count, get normal response
+            self.assertEqual(response.status_code, 200)
+            response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        # access frequency is over the limitation, then forbid
+        self.assertEqual(response.status_code, forbid_code)
+        import time
+        # during the forbidden-time, access will refresh the forbidden-time
+        time.sleep(1) # sleep 1 second
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, forbid_code)
+        # forbidden-time has been refreshed by the lastest access
+        time.sleep(1.5)
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, forbid_code)
+        # now could access normally again
+        time.sleep(2.5)
+        response = self.client.get(reverse(getTags), {'c': self.data[0]['name']})
+        self.assertEqual(response.status_code, 200)
