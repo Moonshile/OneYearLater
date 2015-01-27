@@ -19,63 +19,86 @@ def with_cache(key):
         return inner
     return decorator
 
-@with_cache(cc.OPTIONAL_ANS)
-def getCachedOptionalAnswers():
-    ans = {}
-    answers = OptionalAnswer.objects.all()
+def getOptionalAnswersOfQuestion(question):
+    ans = []
+    answers = question.optionalanswer_set.all()
     for a in answers:
-        ans[a.id] = {
-            'content': a.content,
-            'qid': a.question.id,
-            'is_sln': a.is_solution,
-        }
+        new_a = {}
+        new_a['id'] = a.id
+        new_a['content'] = a.content
+        new_a['is_sln'] = a.is_solution
+        ans.append(new_a)
     return ans
 
-@with_cache(cc.QUESTIONS)
-def getCachedQuestions():
-    qs = {}
-    questions = Question.objects.all()
-    ans = getCachedOptionalAnswers()
+def getQuestionsInTag(tag):
+    qs = []
+    questions = tag.question_set.all()
     for q in questions:
-        qs[q.id] = {
-            'content': q.content,
-            'tid': q.tag.id,
-            'level': q.level,
-            'op_ans': filter(lambda a: ans[a]['qid'] == q.id, ans.keys()),
-        }
+        new_q = {}
+        new_q['id'] = q.id
+        new_q['content'] = q.content
+        new_q['level'] = q.level
+        new_q['op_ans'] = getOptionalAnswersOfQuestion(q)
+        qs.append(new_q)
     return qs
 
-@with_cache(cc.TAGS)
-def getCachedTags():
-    ts = {}
-    tags = Tag.objects.all()
-    questions = getCachedQuestions()
+def getTagsInCategory(category):
+    ts = []
+    tags = category.tag_set.all()
     for t in tags:
-        ts[t.id] = {
-            'name': t.name,
-            'cid': t.category.id,
-            'questions': filter(lambda q: questions[q]['tid'] == t.id, questions.keys()),
-            'question_dist': t.questionDistribution(),
-        }
+        new_t = {}
+        new_t['id'] = t.id
+        new_t['name'] = t.name
+        new_t['questions'] = getQuestionsInTag(t)
+        new_t['question_dist'] = t.questionDistribution()
+        ts.append(new_t)
     return ts
 
-@with_cache(cc.CATEGORIES)
-def getCachedCategories():
-    cs = {}
-    categories = Category.objects.all()
-    tags = getCachedTags()
-    for c in categories:
-        cs[c.name] = {
-            'id': c.id,
-            'n_min': c.n_min,
-            'n_max': c.n_max,
-            'v_step': c.v_step,
-            'v_base': c.v_base,
-            'free_time': c.free_time,
-            'max_time': c.max_time,
-            'tags': filter(lambda t: tags[t]['cid'] == c.id, tags.keys()),
-        }
-    return cs
+# must guarantee that the category name exists
+def getCachedCategory(category_name):
+    key = cc.CATEGORY_BASE + category_name
+    category = cache.get(key)
+    # if in cache
+    if category:
+        return category
+    # not in cache
+    cs = Category.objects.filter(name=category_name)
+    if cs.count() == 0:
+        return None
+    c = cs[0]
+    category = {'id': c.id, 'name': c.name, 
+        'n_first_batch': c.n_first_batch, 'n_next_batch': c.n_next_batch,
+        'n_min': c.n_min, 'n_max': c.n_max,
+        'v_step': c.v_step, 'v_base': c.v_base, 'free_time': c.free_time, 'max_time': c.max_time,
+        'tags': getTagsInCategory(c)
+    }
+    cache.set(key, category)
+    return category
+
+# get a dict that map tags to their categories
+def getCachedTagCategoryMap():
+    m = cache.get(cc.TAG_CATEGORY_MAP)
+    if m:
+        return m
+    tags = Tag.objects.all()
+    m = {}
+    for t in tags:
+        m[t.name] = t.category.name
+    cache.set(cc.TAG_CATEGORY_MAP, m)
+    return m
+
+def getCachedOptionalAnswers():
+    op_ans = cache.get(cc.OPTIONAL_ANSWERS)
+    if op_ans:
+        return op_ans
+    answers = OptionalAnswer.objects.all()
+    op_ans = {}
+    for a in answers:
+        op_ans[a.id] = {}
+        op_ans[a.id]['is_sln'] = a.is_solution
+        op_ans[a.id]['qid'] = a.question.id
+    cache.set(cc.OPTIONAL_ANSWERS, op_ans)
+    return op_ans
 
 # generate a 6-charater random string
 def genQtoken(length=6):
