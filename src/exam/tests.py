@@ -1,198 +1,97 @@
 
 from django.test import TestCase
 from django.core.cache import cache
+import copy, random, string
 
-from exam.models import *
+from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
+from forever import const
 
-def commonSetUp():
-    data = [{
-        'name': 'Programmer',
-        'n_first_batch': 5,
-        'n_next_batch': 1,
-        'n_min': 10,
-        'n_max': 15,
-        'v_step': 2,
-        'v_base': 3,
-        'free_time': 10,
-        'max_time': 32,
-        'tags': [{
-            'name': 'C', 
-            'questions': [
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is #include a macro?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': [
-                    {'content': 'a', 'is_sln': True},
-                    {'content': 'b', 'is_sln': False},
-                    {'content': 'c', 'is_sln': False},
-                    {'content': 'd', 'is_sln': False},
-                ]},
-            ],
-            'question_dist': [{'level': 0, 'count' : 12}, {'level': 3, 'count': 6}],
-        }, {
-            'name': 'C++',
-            'questions': [
-                {'content': 'Is #include a macro?', 'level': 1, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-                {'content': 'Is #include a macro?', 'level': 2, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-                {'content': 'Is #include a macro?', 'level': 3, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-                {'content': 'Is #include a macro?', 'level': 4, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-                {'content': 'Is #include a macro?', 'level': 5, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-                {'content': 'Is #include a macro?', 'level': 6, 'op_ans': []},
-                {'content': 'Is main() necessary?', 'level': 0, 'op_ans': []},
-                {'content': 'What does (*c)(const void *) means?', 'level': 3, 'op_ans': []},
-            ],
-            'question_dist': [
-                {'level': 0, 'count' : 6}, 
-                {'level': 1, 'count' : 1}, 
-                {'level': 2, 'count' : 1}, 
-                {'level': 3, 'count' : 7}, 
-                {'level': 4, 'count' : 1}, 
-                {'level': 5, 'count' : 1}, 
-                {'level': 6, 'count' : 1}, 
-            ],
-        }, {
-            'name': 'Empty',
-            'questions': [],
-            'question_dist': [],
-        },]
-    },{
-        'name': 'Gaokao',
-        'n_first_batch': 12,
-        'n_next_batch': 0,
-        'n_min': 12,
-        'n_max': 12,
-        'v_step': 1,
-        'v_base': 5,
-        'free_time': 8,
-        'max_time': 18,
-        'tags': [],
-    },]
-    for c in data:
-        category = Category.objects.create(name=c['name'], n_min=c['n_min'], n_max=c['n_max'],
-            n_first_batch=c['n_first_batch'], n_next_batch=c['n_next_batch'],
+def commonSetUp(self):
+    categories =  {
+        'Programmer': {
+            'n_min': 10,
+            'n_max': 15,
+            'v_step': 2,
+            'v_base': 3,
+            'free_time': 10,
+            'max_time': 32,
+        },
+        'Gaokao': {
+            'n_min': 15,
+            'n_max': 15,
+            'v_step': 1,
+            'v_base': 5,
+            'free_time': 8,
+            'max_time': 18,
+        },
+        'empty': {
+            'n_min': 15,
+            'n_max': 15,
+            'v_step': 1,
+            'v_base': 5,
+            'free_time': 8,
+            'max_time': 18,
+        },
+    }
+    tags = {}
+    questions = {}
+    op_ans = {}
+    base = '1234567890qazwsxcderfvbgtyhnmjuiklop, .?'
+    def genName():
+        return string.join(random.sample(base, random.randint(4, const.CHAR_MID))).replace(' ', '')
+    for name, c in categories.iteritems():
+        category = Category.objects.create(name=name, n_min=c['n_min'], n_max=c['n_max'],
             v_step=c['v_step'], v_base=c['v_base'],
             free_time=c['free_time'], max_time=c['max_time']
         )
         c['id'] = category.id
-        for t in c['tags']:
-            tag = Tag.objects.create(name=t['name'], category=category)
-            t['id'] = tag.id
-            for q in t['questions']:
-                question = Question.objects.create(content=q['content'], level=q['level'], tag=tag)
-                q['id'] = question.id
-                for a in q['op_ans']:
-                    answer = OptionalAnswer.objects.create(content=a['content'], question=question, is_solution=a['is_sln'])
-                    a['id'] = answer.id
+        c['tags'] = []
+        if name == 'empty':
+            continue
+        for i in range(0, 2):
+            name = genName()
+            while Tag.objects.filter(name=name).count() > 0:
+                name = genName()
+            tag = Tag.objects.create(name=name, category=category)
+            t = {
+                'name': tag.name,
+                'cid': tag.category.id,
+                'questions': [],
+            }
+            c['tags'].append(tag.id)
+            if name == 'Programmer':
+                for j in range(0, 10):
+                    content = genName()
+                    while Question.objects.filter(content=content).count() > 0:
+                        content = genName()
+                    question = Question.objects.create(content=content, level=random.randint(0, 5), tag=tag)
+                    q = {
+                        'content': question.content,
+                        'tid': question.tag.id,
+                        'level': question.level,
+                        'op_ans': [],
+                    }
+                    t['questions'].append(question.id)
+                    for k in range(0, 4):
+                        content = genName()
+                        while Question.objects.filter(content=content).count() > 0:
+                            content = genName()
+                        answer = OptionalAnswer.objects.create(
+                            content=content, question=question, is_solution=(k == 0))
+                        a = {
+                            'content': answer.content,
+                            'qid': answer.question.id,
+                            'is_sln': answer.is_solution,
+                        }
+                        q['op_ans'].append(answer.id)
+                        op_ans[answer.id] = a
+                    questions[question.id] = q
+            t['question_dist'] = tag.questionDistribution()
+            tags[tag.id] = t
     cache.clear()
-    return data
+    self.categories = categories
+    self.tags = tags
+    self.questions = questions
+    self.op_ans = op_ans
 
 

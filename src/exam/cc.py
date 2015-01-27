@@ -1,10 +1,9 @@
 
 # constants for cache keys
 
-# cached category key is CATEGORY_BASE concatenated with name
-CATEGORY_BASE = 'category'
+KEY_BASE = 'forever_exam_'
 
-TAG_CATEGORY_MAP = 'tag_ctg_map'
-
-OPTIONAL_ANSWERS = 'op_ans'
-
+OPTIONAL_ANS = KEY_BASE + 'optional_ans'
+QUESTIONS = KEY_BASE + 'questions'
+TAGS = KEY_BASE + 'tags'
+CATEGORIES = KEY_BASE + 'categories'

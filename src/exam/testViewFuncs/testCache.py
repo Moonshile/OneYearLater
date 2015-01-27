@@ -4,9 +4,8 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
 from exam import cc, ss
-from exam.models import *
-from exam.viewFuncs import *
-from exam.views import *
+from exam.models import Category, Tag, Question, OptionalAnswer, Answer, AnswerSheet
+from exam.viewFuncs import with_cache, getCachedCategories, getCachedOptionalAnswers, getCachedTags, getCachedQuestions
 from exam.tests import commonSetUp
 
 class WithCacheTests(TestCase):
@@ -35,110 +34,93 @@ class WithCacheTests(TestCase):
         actual = cache.get(self.key)
         self.assertEqual(actual, self.value)
 
-class GetOptionalAnswersOfQuestionTests(TestCase):
+class GetCachedOptionalAnswersTests(TestCase):
 
     def setUp(self):
         self.maxDiff = None
-        self.data = commonSetUp()
+        self.data = commonSetUp(self)
 
     """
-    Get answers of a question with many answers
+    Get answers correctly
     """
-    def test_get_many_answers_of_question(self):
-        q = OptionalAnswer.objects.all()[0].question
-        expect = self.data[0]['tags'][0]['questions'][0]['op_ans']
-        actual = getOptionalAnswersOfQuestion(q)
+    def test_get_correctly(self):
+        expect = self.op_ans
+        actual = getCachedOptionalAnswers()
         self.assertEqual(actual, expect)
 
     """
-    Get answers of a question with no answer
+    answers got are in cache
     """
-    def test_get_no_question_in_tag(self):
-        q = filter(lambda x: x.optionalanswer_set.count() == 0, Question.objects.all())[0]
-        expect = []
-        actual = getOptionalAnswersOfQuestion(q)
+    def test_in_cache(self):
+        expect = getCachedOptionalAnswers()
+        actual = cache.get(cc.OPTIONAL_ANS)
         self.assertEqual(actual, expect)
 
-class GetQuestionsInTagTests(TestCase):
+class GetCachedQuestionsTests(TestCase):
 
     def setUp(self):
         self.maxDiff = None
-        self.data = commonSetUp()
+        self.data = commonSetUp(self)
 
     """
-    Get questions in an tag with many questions
+    Get questions correctly
     """
-    def test_get_many_questions_in_tag(self):
-        tag = Tag.objects.filter(name='C')[0]
-        expect = self.data[0]['tags'][0]['questions']
-        actual = getQuestionsInTag(tag)
+    def test_get_correctly(self):
+        expect = self.questions
+        actual = getCachedQuestions()
         self.assertEqual(actual, expect)
 
     """
-    Get questions in an tag with no question
+    questions got are in cache
     """
-    def test_get_no_question_in_tag(self):
-        tag = Tag.objects.filter(name='Empty')[0]
-        expect = []
-        actual = getQuestionsInTag(tag)
+    def test_in_cache(self):
+        expect = getCachedQuestions()
+        actual = cache.get(cc.QUESTIONS)
         self.assertEqual(actual, expect)
 
-class GetTagsInCategoryTests(TestCase):
+class GetCachedTagsTests(TestCase):
 
     def setUp(self):
         self.maxDiff = None
-        self.data = commonSetUp()
+        self.data = commonSetUp(self)
 
     """
-    Get tags in a category with many tags
+    Get questions correctly
     """
-    def test_get_many_tags_in_category(self):
-        c = Category.objects.filter(name='Programmer')[0]
-        expect = self.data[0]['tags']
-        actual = getTagsInCategory(c)
+    def test_get_correctly(self):
+        expect = self.tags
+        actual = getCachedTags()
         self.assertEqual(actual, expect)
 
     """
-    Get tags in a category with no tag
+    questions got are in cache
     """
-    def test_get_no_tag_in_category(self):
-        c = Category.objects.filter(name='Gaokao')[0]
-        expect = []
-        actual = getTagsInCategory(c)
+    def test_in_cache(self):
+        expect = getCachedTags()
+        actual = cache.get(cc.TAGS)
         self.assertEqual(actual, expect)
 
-class GetCachedCategoryTests(TestCase):
+class GetCachedCategoriesTests(TestCase):
 
     def setUp(self):
         self.maxDiff = None
-        self.data = commonSetUp()
-        cache.clear()
+        self.data = commonSetUp(self)
 
     """
-    Get data of exist category
+    Get questions correctly
     """
-    def test_data_of_get_cached_category(self):
-        for c in self.data:
-            expect = c
-            actual = getCachedCategory(c['name'])
-            self.assertEqual(actual, expect)
-
-    """
-    Get data of not exist category
-    """
-    def test_data_of_get_not_exist_category(self):
-        expect = None
-        actual = getCachedCategory('not_exist')
+    def test_get_correctly(self):
+        expect = self.categories
+        actual = getCachedCategories()
         self.assertEqual(actual, expect)
 
     """
-    Assert cache of category
+    questions got are in cache
     """
-    def test_cached_data_of_get_cached_category(self):
-        for c in self.data:
-            expect = getCachedCategory(c['name'])
-            actual = cache.get(cc.CATEGORY_BASE + c['name'])
-            self.assertEqual(actual, expect)
+    def test_in_cache(self):
+        expect = getCachedCategories()
+        actual = cache.get(cc.CATEGORIES)
+        self.assertEqual(actual, expect)
 
 
 
