@@ -1,9 +1,10 @@
 // Based on bootstrap
 
-@import "utils";
-
 // 导航需使用.navbar类
 .theme-light {
+    @theme: "light";
+    @import "@{theme}-utils";
+
     .container {
         max-width: 90%;
     }
@@ -12,6 +13,7 @@
         margin-bottom: 10px;
         background-color: #fff;
         border: none;
+        border-bottom: 1px solid @divider_color;
 
         .navbar-brand {
             padding-top: 20px;
