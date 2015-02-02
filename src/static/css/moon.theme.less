@@ -1,0 +1,83 @@
+// Based on bootstrap
+
+@import "utils";
+
+// 导航需使用.navbar类
+.theme-light {
+    .container {
+        max-width: 90%;
+    }
+    
+    .navbar{
+        margin-bottom: 10px;
+        background-color: #fff;
+        border: none;
+
+        .navbar-brand {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            height: auto;
+            color: @light-text-color;
+            font-size: 1.5em;
+
+            &:hover {
+                color: @text-color;
+            }
+        }
+
+        .navbar-nav {
+            & > li {
+                z-index: 100;
+                padding-left: 5px;
+                padding-right: 5px;
+
+                & > a {
+                    padding-top: 20px;
+                    padding-bottom: 18px;
+                    border-bottom: 2px solid transparent;
+                }
+
+                a, a:hover, a:focus {
+                    background-color: #fff;
+                    border-color: transparent;
+                    color: @light-text-color;
+                }
+
+                a:hover {
+                    color: @text-color;
+                }
+
+                &.active a {
+                    border-color: @main-color;
+                    color: @text-color;
+                }
+            }
+        }
+    }
+
+    .main-wrap {
+
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 60px;
+        padding-top: 20px;
+        border-top: 1px solid @divider_color;
+        color: @x-light-text-color;
+        font-size: @footnote_fontsize;
+
+        .pull-right {
+            li > a {
+                color: @x-light-text-color;
+
+                &:hover {
+                    color: @light-text-color;
+                }
+            }
+        }
+    }
+}
+
