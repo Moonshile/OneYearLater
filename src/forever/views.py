@@ -4,6 +4,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 def index(request):
-    return HttpResponseRedirect('/goal/')
+    return render_to_response('index.html')
 
 
