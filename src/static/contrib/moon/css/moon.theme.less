@@ -58,7 +58,48 @@
     }
 
     .main-wrap {
+        h2 {
+            font-size: 18px;
+            margin-top: 30px;
+            margin-bottom: 20px;
 
+            .fa, .glyphicon {
+                margin-right: 5px;
+            }
+
+            small {
+                margin-left: 5px;
+                color: @x-light-text-color;
+            }
+        }
+
+        .list {
+            border-top: 1px solid @divider_color;
+
+            .item{
+                border-bottom: 1px solid @divider_color;
+            }
+
+            &.main {
+                @blank: 20px;
+                padding-top: @blank;
+
+                .item {
+                    padding-bottom: @blank;
+                    margin-bottom: @blank;
+                }
+            }
+
+            &.side {
+                @blank: 12px;
+                padding-top: @blank;
+
+                .item {
+                    padding-bottom: @blank;
+                    margin-bottom: @blank;
+                }
+            }
+        }
     }
 
     .footer {
@@ -68,8 +109,6 @@
         height: 60px;
         padding-top: 20px;
         border-top: 1px solid @divider_color;
-        color: @x-light-text-color;
-        font-size: @footnote_fontsize;
 
         .pull-right {
             li > a {
@@ -80,6 +119,11 @@
                 }
             }
         }
+    }
+
+    .footnote {
+        color: @x-light-text-color;
+        font-size: @footnote_fontsize;
     }
 }
 
