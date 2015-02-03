@@ -1,5 +1,20 @@
-@import "utils";
 
 body {
     font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.history{
+    width: 100%;
+    margin-bottom: 5px;
+
+    span {
+        display: inline-block;
+        margin-right: -4px;
+        width: 20%;
+        border-bottom: 2px solid green;
+
+        &:first-child {
+            border-color: red;
+        }
+    }
 }

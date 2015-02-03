@@ -1,5 +1,14 @@
 // Based on bootstrap
 
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 150px;
+}
+
 // 导航需使用.navbar类
 .theme-light {
     @theme: "light";
@@ -20,7 +29,7 @@
             padding-bottom: 20px;
             height: auto;
             color: @light-text-color;
-            font-size: 1.5em;
+            font-size: 2rem;
 
             &:hover {
                 color: @text-color;
@@ -59,7 +68,7 @@
 
     .main-wrap {
         h2 {
-            font-size: 18px;
+            font-size: 1.8rem;
             margin-top: 30px;
             margin-bottom: 20px;
 
@@ -80,6 +89,29 @@
                 border-bottom: 1px solid @divider_color;
             }
 
+            .title {
+                margin-top: 0;
+                margin-bottom: 8px;
+
+                a {
+                    color: inherit;
+                    text-decoration: none;
+
+                    &:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            .meta {
+                color: @x-light-text-color;
+                font-size: @footnote_fontsize;
+
+                * + span {
+                    margin-left: 15px;
+                }
+            }
+
             &.main {
                 @blank: 20px;
                 padding-top: @blank;
@@ -87,6 +119,22 @@
                 .item {
                     padding-bottom: @blank;
                     margin-bottom: @blank;
+
+                    .title {
+                        font-size: 2.3rem;
+
+                        small {
+                            margin-left: 15px;
+                        }
+                    }
+
+                    .content {
+                        color: @text-color;
+                        font-size: @text-size;
+                        p {
+                            margin: 5px 0 0 0;
+                        }
+                    }
                 }
             }
 
