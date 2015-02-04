@@ -1,0 +1,20 @@
+
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block stylesheet %}
+<link href="{% static "css/desserts.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block desserts_nav %}
+<li class="active"><a href="#">甜点</a></li>
+{% endblock %}
+
+{% block main_wrap %}
+<div class="container">
+</div><!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

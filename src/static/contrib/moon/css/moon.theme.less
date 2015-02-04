@@ -1,4 +1,4 @@
-// Based on bootstrap
+// Based on bootstrap and fontawesome
 
 html {
     position: relative;
@@ -10,6 +10,7 @@ body {
 }
 
 // 导航需使用.navbar类
+// 这是一套安静的主题
 .theme-light {
     @theme: "light";
     @import "@{theme}-utils";
@@ -172,6 +173,30 @@ body {
     .footnote {
         color: @x-light-text-color;
         font-size: @footnote_fontsize;
+    }
+}
+
+
+
+// 以下是各种有趣的杂项组件
+
+// 自定义项目符号的有序列表，依赖于FontAwesome
+ol.theme-check-ol {
+    list-style-type: none;
+    padding-left: 3em;
+    counter-reset: section;
+
+    .bullet {
+        margin-left: -3em;
+
+        & + span:after {
+            display: inline-block;
+            min-width: 1.8em;
+            padding-right: .2em;
+            counter-increment: section;
+            content: counter(section) ".";
+            text-align: right;
+        }
     }
 }
 
