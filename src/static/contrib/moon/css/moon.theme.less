@@ -180,8 +180,8 @@ body {
 
 // 以下是各种有趣的杂项组件
 
-// 自定义项目符号的有序列表，依赖于FontAwesome
-ol.theme-check-ol {
+// 自定义项目符号的有序列表
+ol.ol-basic {
     list-style-type: none;
     padding-left: 3em;
     counter-reset: section;
@@ -192,7 +192,7 @@ ol.theme-check-ol {
         & + span:after {
             display: inline-block;
             min-width: 1.8em;
-            padding-right: .2em;
+            padding-right: .4em;
             counter-increment: section;
             content: counter(section) ".";
             text-align: right;
