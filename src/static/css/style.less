@@ -3,6 +3,25 @@ body {
     font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
 }
 
+.content {
+    ol {
+        list-style-type: none;
+        padding-left: 2.8em;
+        counter-reset: section;
+
+        .fa {
+            margin-left: -2.8em;
+
+            & + span:after {
+                display: inline-block;
+                min-width: 1.6em;
+                counter-increment: section;
+                content: counter(section) ".";
+            }
+        }
+    }
+}
+
 .history{
     width: 60%;
     margin-bottom: 5px;
