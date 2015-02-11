@@ -1,5 +1,10 @@
 
 
 $(document).ready(function() {
-    historyHorizontal($('.history-h'), [{'weight':1, 'color': '#f00'}, {'weight': 2, 'color': '#0f0'}]);
+    var data = [];
+    var len = 100;
+    for(var i = 1; i <= len; i++) {
+        data.push({'proportion': i/len});
+    }
+    historyHorizontal($('.history-h'), data);
 });
