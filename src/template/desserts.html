@@ -2,6 +2,10 @@
 {% extends "base.html" %}
 {% load static from staticfiles %}
 
+{% block title %}
+甜点 | 走梦
+{% endblock %}
+
 {% block stylesheet %}
 <link href="{% static "css/desserts.css" %}" rel="stylesheet">
 {% endblock %}
@@ -17,7 +21,18 @@
             <h2><span class="fa fa-fire"></span> 推荐<small>即使厌了，歇脚也有收获</small></h2>
             <div class="list main">
                 <div class="item">
-                    
+                    <h2 class="title"><a href="#">Moonshile</a><small>1小时前</small></h2>
+                    <div class="content"></div>
+                    <div class="meta">
+                        <div class="pull-right">
+                            <span>
+                                <span class="bullet fa fa-heart-o"></span> 123
+                            </span>
+                            <span>
+                                <span class="bullet fa fa-code-fork"></span> 10
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="item"></div>
             </div><!-- /.list.main -->
