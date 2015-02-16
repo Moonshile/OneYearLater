@@ -19,18 +19,13 @@ function colorGradient(proportion, anchors) {
     if (index == anchors.length - 1 || anchors[index].p == proportion) {
         return colorToStr(anchors[index].c);
     }
-    var start = anchors[index].c;
-    var end = anchors[index + 1].c;
     var dProp = (proportion - anchors[index].p)/(anchors[index + 1].p - anchors[index].p)
-    var dRed = ((end & 0xff0000) - (start & 0xff0000));
-    var dGreen = ((end & 0x00ff00) - (start & 0x00ff00));
-    var dBlue = (end & 0x0000ff) - (start & 0x0000ff);
-    function component(bCom, dCom, loc) {
-        return ((bCom>>loc) + dProp*(dCom>>loc)) << loc;
+    function component(loc) {
+        var startCompo = anchors[index].c>>loc&0xff;
+        var endCompo = anchors[index + 1].c>>loc&0xff;
+        return (startCompo + dProp*(endCompo - startCompo)) << loc;
     }
-    return colorToStr(component(start&0xff0000, dRed, 16) |
-        component(start&0x00ff00, dGreen, 8) |
-        component(start&0x0000ff, dBlue, 0));
+    return colorToStr(component(16) | component(8) | component(0));
 }
 
 // 根据比例数值（0-1）返回相应的红色到绿色的渐变色
