@@ -15,3 +15,8 @@ function binSearch(arr, lo, hi, target, cmp) {
 function binSearchInArr(arr, target, cmp) {
     return binSearch(arr, 0, arr.length, target, cmp);
 }
+
+// change an integer 0xffaacc to a color string such as ffaacc
+function int2color(c) {
+    return (0x1000000 | c).toString(16).substr(1);
+}

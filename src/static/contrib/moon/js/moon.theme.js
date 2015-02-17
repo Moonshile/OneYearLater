@@ -11,21 +11,18 @@ function colorGradient(proportion, anchors) {
     function compare(a, b) {
         return a.p - b.p;
     }
-    function colorToStr(color) {
-        return '#' + (color | 0x1000000).toString(16).substr(1);
-    }
     anchors.sort(compare);
     var index = binSearchInArr(anchors, {"p": proportion}, compare);
     if (index == anchors.length - 1 || anchors[index].p == proportion) {
-        return colorToStr(anchors[index].c);
+        return '#' + int2color(anchors[index].c);
     }
     var dProp = (proportion - anchors[index].p)/(anchors[index + 1].p - anchors[index].p)
     function component(loc) {
         var startCompo = anchors[index].c>>loc&0xff;
         var endCompo = anchors[index + 1].c>>loc&0xff;
-        return (startCompo + dProp*(endCompo - startCompo)) << loc;
+        return (startCompo + dProp*(endCompo - startCompo))<<loc;
     }
-    return colorToStr(component(16) | component(8) | component(0));
+    return '#' + int2color(component(16) | component(8) | component(0));
 }
 
 // 根据比例数值（0-1）返回相应的红色到绿色的渐变色
