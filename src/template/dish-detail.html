@@ -15,16 +15,37 @@ Moonshile 的餐品 | 走梦
     <div class="row">
         <div class="col-sm-8">
             <h2><span class="fa fa-list-ol"></span> Checklist</h2>
-            <div class="list main"></div>
+            <div class="list main">
+                <div class="item">
+                    <ol>
+                        <li class="text-success">浏览资讯
+                            <span class="bullet fa fa-check-square"></span>
+                            <small>老罗确实有情怀，给OpenSSL捐了这么多</small>
+                        </li>
+                        <li class="text-danger">读书
+                            <span class="bullet fa fa-minus-square"></span>
+                            <small>看病去了，搁置</small>
+                        </li>
+                        <li id="1233">
+                            <span>实验室工作 <span class="fa fa-edit"></span></span>
+                        </li>
+                        <li id="1234">
+                            <span>自己喜欢的事情 <span class="fa fa-edit"></span></span>
+                        </li>
+                        <li id="1235">
+                            <span>小节 <span class="fa fa-edit"></span></span>
+                        </li>
+                    </ol>
+                </div>
+                
+            </div>
         </div><!-- /.col-sm-8 -->
         <div class="col-sm-4">
-            <h2><span class="fa fa-user"></span> <a href="#">Moonshile</a></h2>
-            <div class="list side"></div>
         </div><!-- /.col-sm-4 -->
     </div><!-- /.row -->
 </div><!-- /.container -->
 {% endblock %}
 
 {% block javascript %}
-
+<script src="{% static "js/dish-detail.js" %}"></script>
 {% endblock %}
