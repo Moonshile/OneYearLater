@@ -29,6 +29,14 @@ function fix(id, isComplete) {
 
 function edit(e) {
     var p = e.target.parentNode;
+    try{
+        while(p.tagName.toLowerCase() != 'li') {
+            p = p.parentNode;
+        }
+    } catch(e) {
+        console.warn(e);
+        return;
+    }
     p.innerHTML = '\
         <input type="text" value="' + p.textContent.trim() + '">\
         <textarea rows="2" placeholder="具体描述（非必填）"></textarea>\
@@ -50,10 +58,10 @@ function cancel(id) {
     var title = $('#' + id + ' input').val();
     $('#' + id).html('<span>' + title + ' <span class="fa fa-edit"></span></span>');
     $('#' + id).attr('class', '');
-    $('#' + id + ' > span').click(edit);
+    $('#' + id + ' span').click(edit);
 }
 
 $(document).ready(function (){
-    $('.item ol li[class!="on"] > span').click(edit);
+    $('.item ol li[class!="on"] span').click(edit);
 });
 
