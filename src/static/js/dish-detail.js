@@ -17,24 +17,14 @@ function edit(e) {
     p.className = "on";
 }
 
-function complete(id) {
+function fix(id, isComplete) {
     var title = $('#' + id + ' input').val();
     var content = $('#' + id + ' textarea').val();
     //TODO
-    $('#' + id).html(title + '\
-        <span class="bullet fa fa-check-square"></span>\
-        <small>' + content + '</small>');
-    $('#' + id).attr('class', 'text-success');
-}
-
-function delay(id) {
-    var title = $('#' + id + ' input').val();
-    var content = $('#' + id + ' textarea').val();
-    //TODO
-    $('#' + id).html(title + '\
-        <span class="bullet fa fa-minus-square"></span>\
-        <small>' + content + '</small>');
-    $('#' + id).attr('class', 'text-danger');
+    $('#' + id).html(title + '<span class="bullet fa fa-' +
+     (isComplete ? 'check' : 'minus') +'-square"></span>' +
+     '<small>' + content + '</small>');
+    $('#' + id).attr('class', 'text-' + (isComplete ? 'success' : 'danger'));
 }
 
 function edit(e) {
@@ -46,10 +36,10 @@ function edit(e) {
             <span class="btn btn-xs pull-right btn-cancel" onclick="cancel(' + p.id + ')">\
                 <span class="fa fa-chevron-up"></span> 取消\
             </span>\
-            <span class="btn btn-xs pull-right" onclick="delay(' + p.id + ')">\
+            <span class="btn btn-xs pull-right" onclick="fix(' + p.id + ',false)">\
                 <span class="fa fa-minus-circle text-danger"></span> 搁置\
             </span>\
-            <span class="btn btn-xs pull-right" onclick="complete(' + p.id + ')">\
+            <span class="btn btn-xs pull-right" onclick="fix(' + p.id + ',true)">\
                 <span class="fa fa-check-circle text-success"></span> 完成\
             </span>\
         </div>';
