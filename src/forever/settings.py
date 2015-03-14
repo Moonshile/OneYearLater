@@ -41,9 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'dishes',
     'desserts',
-    'goal',
     'account',
-    'exam',
 )
 
 MIDDLEWARE_CLASSES = (

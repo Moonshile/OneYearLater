@@ -14,11 +14,6 @@ urlpatterns = patterns('',
     url(r'^dishes/', include('dishes.urls')),
     # desserts
     url(r'^desserts/', include('desserts.urls')),
-    # goal
-    url(r'^goal/', include('goal.urls')),
-    # exam
-    url(r'^exam/', include('exam.urls')),
-
     # admin
     url(r'^admin/', include(admin.site.urls)),
 )
