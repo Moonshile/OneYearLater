@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}
+碗里 | 走梦
+{% endblock %}
+
+{% block stylesheet %}
+<link href="{% static "css/bowl.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block bowl_nav %}
+<li class="active"><a href="#">碗里</a></li>
+{% endblock %}
+
+{% block main_wrap %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2><span class="fa fa-coffee"></span> 我的碗<small>因为努力，所以丰盛</small></h2>
+            <div class="list main">
+                <div class="item">
+                    <h2 class="title">碗里的菜菜们<small>一日三餐，不能缺少</small></h2>
+                    <ol class="content">
+                        <li class="text-success">浏览资讯
+                            <span class="bullet fa fa-check-square"></span>
+                            <small>老罗确实有情怀，给OpenSSL捐了这么多</small>
+                        </li>
+                        <li class="text-danger">读书
+                            <span class="bullet fa fa-minus-square"></span>
+                            <small>看病去了，搁置</small>
+                        </li>
+                        <li class="todo" id="1233">
+                            <span>实验室工作 <span class="fa fa-edit"></span></span>
+                        </li>
+                        <li class="todo" id="1234">
+                            <span>自己喜欢的事情 <span class="fa fa-edit"></span></span>
+                        </li>
+                        <li class="todo" id="1235">
+                            <span>小节 <span class="fa fa-edit"></span></span>
+                        </li>
+                    </ol>
+                </div><!-- /.item current plan -->
+                <div class="item">
+                    <h2 class="title">菜单<small>在这里定制你的饭碗～</small></h2>
+                    
+                </div><!-- /.item plan repository -->
+                <div class="item">
+                    <h2 class="title">小补品<small>有哪些营养是需要定时补充的？</small></h2>
+                    
+                </div><!-- /.item special plans -->
+            </div>
+        </div><!-- /.col-sm-8 -->
+        <div class="col-sm-4">
+        </div><!-- /.col-sm-4 -->
+    </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static "js/bowl.js" %}"></script>
+{% endblock %}

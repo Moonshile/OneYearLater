@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+{% load static from staticfiles %}
+
+{% block title %}
+注册 | 走梦
+{% endblock %}
+
+{% block stylesheet %}
+<link href="{% static "css/signup.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block signup_nav %}
+<li class="active"><a href="#">注册</a></li>
+{% endblock %}
+
+{% block main_wrap %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2><span class="fa fa-user"></span> 注册<small>回望自己写就的历史，才觉得活得真实</small></h2>
+            <div class="list main">
+                <div class="item">
+                    <form method="post">
+                        <div class="form-group">
+                            <input type="email" class="form-control input-sm" id="email" name="email" placeholder="邮箱">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control input-sm" id="password" name="password" placeholder="密码">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control input-sm" id="password2" name="password2" placeholder="确认密码">
+                        </div>
+                        <button type="submit" class="btn btn-default btn-sm">开启真实之旅</button>
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.col-sm-8 -->
+        <div class="col-sm-4">
+        </div><!-- /.col-sm-4 -->
+    </div><!-- /.row -->
+</div><!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static "js/signup.js" %}"></script>
+{% endblock %}

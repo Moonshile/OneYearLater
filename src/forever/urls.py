@@ -10,6 +10,8 @@ from forever import views
 urlpatterns = patterns('',
     url(r'^$', views.index),
 
+    # account
+    url(r'^account/', include('account.urls')),
     # dishes
     url(r'^dishes/', include('dishes.urls')),
     # desserts

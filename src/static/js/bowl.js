@@ -29,7 +29,7 @@ function fix(id, isComplete) {
     var title = $('#' + id + ' input').val();
     var content = $('#' + id + ' textarea').val();
     //TODO
-    $('#' + id).html(title + '<span class="bullet fa fa-' +
+    $('#' + id).html(title + ' <span class="bullet fa fa-' +
      (isComplete ? 'check' : 'minus') +'-square"></span>' +
      '<small>' + content + '</small>');
     $('#' + id).attr('class', 'text-' + (isComplete ? 'success' : 'danger'));
