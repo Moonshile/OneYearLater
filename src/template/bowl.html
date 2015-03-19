@@ -25,14 +25,14 @@
                     <ol class="content">
                         <li class="text-success">浏览资讯
                             <span class="bullet fa fa-check-square"></span>
-                            <small>老罗确实有情怀，给OpenSSL捐了这么多</small>
+                            <small>老罗确实有情怀，给OpenSSL捐了这么多老罗确实有情怀，给OpenSSL捐了这么多老罗确实有情怀，给OpenSSL捐了这么多</small>
                         </li>
                         <li class="text-danger">读书
                             <span class="bullet fa fa-minus-square"></span>
                             <small>看病去了，搁置</small>
                         </li>
                         <li class="todo" id="1233">
-                            <span>实验室工作 <span class="fa fa-edit"></span></span>
+                            <span>实验室工作 <span id="asdf" class="fa fa-edit"></span></span>
                         </li>
                         <li class="todo" id="1234">
                             <span>自己喜欢的事情 <span class="fa fa-edit"></span></span>
@@ -41,14 +41,139 @@
                             <span>小节 <span class="fa fa-edit"></span></span>
                         </li>
                     </ol>
+                    <div class="to dessert">
+                        <a class="btn btn-sm pull-right" href="#">
+                            <span class="fa fa-plane"></span> 今天不想干活了！
+                        </a>
+                    </div>
                 </div><!-- /.item current plan -->
                 <div class="item">
                     <h2 class="title">菜单<small>在这里定制你的饭碗～</small></h2>
-                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Plan
+                                        <span class="fa fa-check pull-right"></span>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>浏览资讯</li>
+                                        <li>读书</li>
+                                        <li>实验室工作</li>
+                                    </ol>
+                                    <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                        <span>...</span>
+                                        <span class="btn fa fa-check hidden"></span>
+                                        <span class="btn fa fa-edit pull-right" data-toggle="modal" data-target="#edit-bowl"></span>
+                                        <span class="btn fa fa-trash pull-right hidden"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.col-sm-4 -->
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Plan
+                                        <span class="fa fa-check pull-right hidden"></span>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>浏览资讯</li>
+                                        <br>
+                                        <br>
+                                    </ol>
+                                    <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                        <span class="btn fa fa-check"></span>
+                                        <span class="btn fa fa-edit pull-right" data-toggle="modal" data-target="#edit-bowl"></span>
+                                        <span class="btn fa fa-trash pull-right"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.col-sm-4 -->
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Plan
+                                        <span class="fa fa-check pull-right hidden"></span>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <ol>
+                                        <li>浏览资讯</li>
+                                        <li>浏览资讯浏览资讯浏览资讯</li>
+                                        <li>浏览资讯</li>
+                                    </ol>
+                                    <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                                        <span class="btn fa fa-check"></span>
+                                        <span class="btn fa fa-edit pull-right" data-toggle="modal" data-target="#edit-bowl"></span>
+                                        <span class="btn fa fa-trash pull-right"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.col-sm-4 -->
+                    </div><!-- /.row -->
                 </div><!-- /.item plan repository -->
                 <div class="item">
                     <h2 class="title">小补品<small>有哪些营养是需要定时补充的？</small></h2>
-                    
+                    <div class="table-responsive">
+                    <table class="week table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="10%">#</th>
+                                <th width="30%">上午</th>
+                                <th width="30%">下午</th>
+                                <th width="30%">晚上</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>周日</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周一</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周二</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周三</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周四</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周五</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>周六</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>
                 </div><!-- /.item special plans -->
             </div>
         </div><!-- /.col-sm-8 -->
@@ -56,6 +181,56 @@
         </div><!-- /.col-sm-4 -->
     </div><!-- /.row -->
 </div><!-- /.container -->
+{% endblock %}
+
+{% block addition %}
+<div class="modal fade" id="edit-bowl" tabindex="-1" role="dialog" aria-labelledby="edit-bowl-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="edit-bowl-title">编辑</h4>
+            </div>
+            <div class="modal-body">
+                <ol class="edit-task">
+                    <li id="e1">
+                        <div class="item">
+                            <span class="content">浏览资讯浏览资讯浏览资讯浏览资讯浏览资讯</span>
+                            <span class="btn btn-sm fa fa-trash pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-down pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-up pull-right"></span>
+                        </div>
+                    </li>
+                    <li id="e2">
+                        <div class="item">
+                            <span class="content">读书</span>
+                            <span class="btn btn-sm fa fa-trash pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-down pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-up pull-right"></span>
+                        </div>
+                    </li>
+                    <li id="e3">
+                        <div class="item">
+                            <span class="content">实验室工作</span>
+                            <span class="btn btn-sm fa fa-trash pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-down pull-right"></span>
+                            <span class="btn btn-sm fa fa-chevron-up pull-right"></span>
+                        </div>
+                    </li>
+                    <li class="text-muted">
+                        <div class="item">
+                            <span class="btn btn-sm">
+                                <span class="fa fa-plus"></span> New Task
+                            </span>
+                        </div>
+                    </li>
+                </ol>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {% endblock %}
 
 {% block javascript %}

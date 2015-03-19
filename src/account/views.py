@@ -10,6 +10,9 @@ from account.models import Account
 def account(request):
     return render_to_response('bowl.html')
 
+def bowl(request):
+    return render_to_response('bowl.html')
+
 def signin(request):
     return render_to_response('signin.html')
 

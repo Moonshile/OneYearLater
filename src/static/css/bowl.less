@@ -2,15 +2,17 @@ h2.title {
     font-size: 1.2em!important;
 }
 
-.item > ol {
+ol.content {
     font-size: 1.1em;
     margin: 0;
+    padding-left: 1.5em;
+    padding-right: 0;
 
     & > li {
         padding: 3px 0 3px 0;
 
         &.on {
-            width: 90%;
+            width: 80%;
 
             & > div {
                 display: inline-block;
@@ -24,10 +26,59 @@ h2.title {
     }
 }
 
+.to.dessert {
+    height: 1.2em;
+
+    .btn:active {
+        box-shadow: none;
+    }
+}
+
 span.btn {
     font-size: .9em;
 }
 
 .btn-cancel {
     margin-left: 1em;
+}
+
+.panel {
+    ol {
+        padding-left: 1.5em;
+    }
+
+    .btn-group {
+        width: 100%;
+
+        .fa-check {
+            float: none;
+        }
+    }
+}
+
+.edit-task {
+    div.item {
+        width: 100%;
+        display: inline-block;
+
+        .content, input {
+            width: 50%;
+        }
+    }
+
+    li.text-muted .item .btn {
+        padding: 0;
+    }
+}
+
+// 周视图
+table.week {
+    th {
+        text-align: center;
+    }
+
+    td input {
+        width: 100%;
+        height: 100%;
+    }
 }

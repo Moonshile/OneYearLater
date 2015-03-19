@@ -47,7 +47,7 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            {% block bowl_nav %}<li><a href="/account">碗里</a></li>{% endblock %}
+            {% block bowl_nav %}<li><a href="/account/bowl">碗里</a></li>{% endblock %}
             {% block signin_nav %}<li><a href="/account/signin">登录</a></li>{% endblock %}
             {% block signup_nav %}<li><a href="/account/signup">注册</a></li>{% endblock %}
           </ul>
@@ -71,6 +71,7 @@
         </ul>
       </div>
     </div>
+    {% block addition %}{% endblock %}
     <script src="{% static "contrib/jquery.min.js" %}"></script>
     <script src="{% static "contrib/bootstrap/js/bootstrap.min.js" %}"></script>
     <script src="{% static "contrib/moon/js/moon.theme.js" %}"></script>

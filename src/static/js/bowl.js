@@ -1,12 +1,26 @@
+
+$(document).ready(init);
+
+function init() {
+    $('li.todo span').click(edit);
+
+    $('.panel-body .fa-check').click(checkTask);
+    $('.panel-body .fa-trash').click(delTask);
+
+    $('.edit-task div.item span.content').click(editTaskItem);
+    $('.edit-task .text-muted div.item span.btn').click(newTaskItem);
+    $('.edit-task div.item span.fa-chevron-up').click(upTaskItem);
+    $('.edit-task div.item span.fa-chevron-down').click(downTaskItem);
+    $('.edit-task div.item span.fa-trash').click(delTaskItem);
+
+    $('td').click(editTd);
+}
+
 function edit(e) {
+    e.stopPropagation();
     var p = e.target.parentNode;
-    try{
-        while(p.tagName.toLowerCase() != 'li') {
-            p = p.parentNode;
-        }
-    } catch(e) {
-        console.warn(e);
-        return;
+    while(p.tagName.toLowerCase() != 'li') {
+        p = p.parentNode;
     }
     p.innerHTML = '\
         <input type="text" value="' + p.textContent.trim() + '">\
@@ -42,7 +56,169 @@ function cancel(id) {
     $('#' + id + ' span').click(edit);
 }
 
-$(document).ready(function (){
-    $('li.todo span').click(edit);
-});
+function checkTask(e) {
+    // TODO connect to server
+    $('.panel-primary .hidden').removeClass('hidden');
+    $('.panel-primary h3 .fa-check').addClass('hidden');
+    $('.panel-primary').removeClass('panel-primary').addClass('panel-default');
 
+    var panel = e.target;
+    while(!$(panel).hasClass('panel-default')) {
+        panel = panel.parentNode;
+    }
+    $(panel).removeClass('panel-default').addClass('panel-primary');
+    $('.panel-primary .hidden').removeClass('hidden');
+    $('.panel-primary .btn-group .fa-check').addClass('hidden');
+    $('.panel-primary .btn-group .fa-trash').addClass('hidden');
+    // TODO update 碗里的菜菜们
+}
+
+function delTask(e) {
+    // TODO connect to server
+    var col = e.target;
+    while(!$(col).hasClass('col-sm-4')) {
+        col = col.parentNode;
+    }
+    col.parentNode.removeChild(col);
+}
+
+function editTaskItem(e) {
+    var t = e.target;
+    var p = t.parentNode;
+    var n = document.createElement('input');
+    n.setAttribute('type', 'text');
+    n.setAttribute('value', t.innerHTML);
+    p.replaceChild(n, t);
+
+    $(n).focus().blur(editedTaskItem);
+}
+
+function editedTaskItem(e) {
+    //TODO connect to server
+    var t = e.target;
+    var p = t.parentNode;
+    var n = document.createElement('span');
+    n.setAttribute('class', 'content');
+    n.innerHTML = t.value;
+    if(t.value) {
+        p.replaceChild(n, t);
+        $(n).click(editTaskItem);
+    } else {
+        // remove the task if it is empty
+        for(n in p.childNodes) {
+            if($(p.childNodes[n]).hasClass('fa-trash')) {
+                p.childNodes[n].click();
+                break;
+            }
+        }
+    }
+}
+
+function newTaskItem(e) {
+    var t = e.target;
+    while(t.parentNode.tagName.toLowerCase() != 'div'){
+        t = t.parentNode;
+    }
+    var p = t.parentNode;
+    var n = document.createElement('input');
+    n.setAttribute('type', 'text');
+    n.setAttribute('value', '');
+    p.replaceChild(n, t);
+
+    $(n).focus().blur(newedTaskItem);
+}
+
+function newedTaskItem(e) {
+    var t = e.target;
+    var p = t.parentNode;
+    var n = document.createElement('span');
+    n.setAttribute('class', 'btn btn-sm');
+    n.innerHTML = '<span class="fa fa-plus"></span> New Task';
+    $(n).click(newTaskItem);
+    p.replaceChild(n, t);
+
+    if(t.value) {
+        //TODO connect to server
+        var li = document.createElement('li');
+        li.setAttribute('id', 'temp');//TODO
+        var div = document.createElement('div');
+        div.setAttribute('class', 'item');
+        li.appendChild(div);
+        var task = document.createElement('span');
+        task.setAttribute('class', 'content');
+        task.innerHTML = t.value;
+        div.appendChild(task);
+        var classes = ['fa-trash', 'fa-chevron-down', 'fa-chevron-up'];
+        var events = [delTask, downTask, upTask];
+        for(var i = 0; i < classes.length; i++) {
+            var btn = document.createElement('span');
+            btn.setAttribute('class', 'btn btn-sm pull-right fa ' + classes[i]);
+            $(btn).click(events[i]);
+            div.appendChild(btn);
+        }
+        var plus_li = n;
+        var list = plus_li.parentNode;
+        while(list.tagName.toLowerCase() != 'ol') {
+            plus_li = plus_li.parentNode;
+            list = plus_li.parentNode;
+        }
+        list.insertBefore(li, plus_li);
+    }
+}
+
+function upTaskItem(e) {
+    //TODO connect to server
+    var o = e.target.parentNode.parentNode;
+    var s = o.previousSibling;
+    // Most browsers will treat blanks or new lines as text nodes
+    while(s && s.nodeName.toLowerCase() != 'li') {
+        s = s.previousSibling;
+    }
+    if(s) {
+        o.parentNode.insertBefore(o, s);
+    }
+}
+
+function downTaskItem(e) {
+    //TODO connect to server
+    var o = e.target.parentNode.parentNode;
+    var s = o.nextSibling;
+    // Most browsers will treat blanks or new lines as text nodes
+    while(s && s.nodeName.toLowerCase() != 'li') {
+        s = s.nextSibling;
+    }
+    if(s && !$(s).hasClass('text-muted')) {
+        o.parentNode.insertBefore(s, o);
+    }
+}
+
+function delTaskItem(e) {
+    //TODO connect to server
+    var t = e.target.parentNode.parentNode;
+    t.parentNode.removeChild(t);
+}
+
+function editTd(e) {
+    var t = e.target;
+    var n = document.createElement('input');
+    n.setAttribute('type', 'text');
+    n.setAttribute('value', t.innerHTML);
+    t.appendChild(n);
+
+    $(n).focus().blur(editedTd);
+}
+
+function editedTd(e) {
+    var t = e.target;
+    var p = t.parentNode;
+    var n = document.createElement('text');
+    n.innerHTML = t.value;
+    if(t.value) {
+        //TODO connect to server
+        p.replaceChild(n, t);
+    } else {
+        p.removeChild(t);
+        p.removeChild(n);
+    }
+    $(p).click(editTd);
+}
