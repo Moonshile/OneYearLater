@@ -165,6 +165,7 @@ function newedTaskItem(e) {
             plus_li = plus_li.parentNode;
             list = plus_li.parentNode;
         }
+        $(task).click(editTaskItem);
         list.insertBefore(li, plus_li);
     }
 }
