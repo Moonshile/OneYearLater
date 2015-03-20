@@ -37,6 +37,7 @@ function edit(e) {
             </span>\
         </div>';
     p.className = "on";
+    $('li.on textarea').focus().select();
 }
 
 function fix(id, isComplete) {
@@ -91,6 +92,7 @@ function editTaskItem(e) {
     p.replaceChild(n, t);
 
     $(n).focus().blur(editedTaskItem);
+    n.select();
 }
 
 function editedTaskItem(e) {
@@ -126,6 +128,7 @@ function newTaskItem(e) {
     p.replaceChild(n, t);
 
     $(n).focus().blur(newedTaskItem);
+    n.select();
 }
 
 function newedTaskItem(e) {
@@ -149,7 +152,7 @@ function newedTaskItem(e) {
         task.innerHTML = t.value;
         div.appendChild(task);
         var classes = ['fa-trash', 'fa-chevron-down', 'fa-chevron-up'];
-        var events = [delTask, downTask, upTask];
+        var events = [delTaskItem, downTaskItem, upTaskItem];
         for(var i = 0; i < classes.length; i++) {
             var btn = document.createElement('span');
             btn.setAttribute('class', 'btn btn-sm pull-right fa ' + classes[i]);
@@ -203,22 +206,18 @@ function editTd(e) {
     var n = document.createElement('input');
     n.setAttribute('type', 'text');
     n.setAttribute('value', t.innerHTML);
+    t.innerHTML = '';
     t.appendChild(n);
 
     $(n).focus().blur(editedTd);
+    n.select();
 }
 
 function editedTd(e) {
     var t = e.target;
-    var p = t.parentNode;
-    var n = document.createElement('text');
-    n.innerHTML = t.value;
-    if(t.value) {
+    var v = t.value;
+    t.parentNode.innerHTML = v;
+    if(v) {
         //TODO connect to server
-        p.replaceChild(n, t);
-    } else {
-        p.removeChild(t);
-        p.removeChild(n);
     }
-    $(p).click(editTd);
 }
