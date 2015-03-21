@@ -45,7 +45,8 @@ function addDessert() {
     $('.kinds.sour').append(span);
 }
 
-function completeChoose() {
+function completeChoose(e) {
+    e.target.setAttribute('disabled', 'disabled');
     var colors = ['danger', 'warning', 'success', 'info', 'primary'];
     var length = $('.kinds.dest span').length;
     if(length == 0) {
@@ -54,6 +55,7 @@ function completeChoose() {
         length = sour.length;
     }
     $('.kinds.dest span').removeClass(colors.join(' ')).addClass('default');
+    $('.kinds span').unbind('click');
     var res = Math.floor(Math.random()*length);
     $($('.kinds.dest span')[res]).addClass('success');
     //TODO connect to server
