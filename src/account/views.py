@@ -13,6 +13,9 @@ def account(request):
 def bowl(request):
     return render_to_response('bowl.html')
 
+def dessert(request):
+    return render_to_response('dessert.html')
+
 def signin(request):
     return render_to_response('signin.html')
 

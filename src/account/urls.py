@@ -6,6 +6,7 @@ from account import views
 urlpatterns = patterns('',
     url(r'^$', views.account),
     url(r'^bowl/$', views.bowl),
+    url(r'^dessert/$', views.dessert),
     url(r'^signin/$', views.signin),
     url(r'^signup/$', views.signup),
 )
