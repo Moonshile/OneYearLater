@@ -16,29 +16,13 @@ def bowl(request):
 def dessert(request):
     return render_to_response('dessert.html')
 
+@ensure_csrf_cookie
 def signin(request):
     return render_to_response('signin.html')
 
+@ensure_csrf_cookie
 def signup(request):
+    
     return render_to_response('signup.html')
-
-def addUser(username, pwd=None, email=None, age=None, gender=None):
-    user = User.objects.create_user(
-            username = username,
-            password = username if pwd is None else pwd,
-            email = username if email is None else email,
-            )
-    user.save()
-    addAccount(user, age, gender)
-    return user
-
-def addAccount(owner, age=None, gender=None):
-    account = Account(
-            owner = owner,
-            age = age,
-            gender = gender,
-            )
-    account.save()
-    return account
 
 
