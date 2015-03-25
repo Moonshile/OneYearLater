@@ -57,7 +57,7 @@ class SignupForm(forms.Form):
 
 class SigninForm(forms.Form):
     username = forms.CharField(error_messages={
-        'invalid': u'用户名或者邮箱',
+        'invalid': u'用户名或者邮箱错误',
     })
     password = forms.CharField(max_length=15, min_length=6, error_messages={
         'max_length': max_len_msg % 15,
@@ -67,9 +67,9 @@ class SigninForm(forms.Form):
 
     def clean_username(self):
         pattern = re.compile(r'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
-        email = forms.EmailField()
+        email = forms.EmailField(error_messages={'invalid': u'是字母、数字或者汉字，或者你的邮箱'})
         username = self.cleaned_data['username']
-        if not pattern.match(username) or not email.clean(username):
+        if not pattern.match(username) and not email.clean(username):
             raise forms.ValidationError((u'是字母、数字或者汉字，或者你的邮箱'), code='content')
         return username
 
