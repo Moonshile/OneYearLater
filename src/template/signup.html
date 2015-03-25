@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block stylesheet %}
-<link href="{% static "css/signup.css" %}" rel="stylesheet">
+<!--link href="{% static "css/signup.css" %}" rel="stylesheet"-->
 {% endblock %}
 
 {% block signup_nav %}
@@ -21,15 +21,47 @@
             <h2><span class="fa fa-user"></span> 注册<small>回望自己写就的历史，才觉得活得真实</small></h2>
             <div class="list main">
                 <div class="item">
-                    <form method="post">
+                    <form method="post" action=".">
+                         {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control input-sm" id="username" name="username" placeholder="用户名">
+                            {% if err.username %}
+                            <p class="error">应该
+                                {% for e in err.username %}
+                                {{ e }}{% if not forloop.last %}，{% endif %}
+                                {% endfor %}
+                            </p>
+                            {% endif %}
+                        </div>
                         <div class="form-group">
                             <input type="email" class="form-control input-sm" id="email" name="email" placeholder="邮箱">
+                            {% if err.email %}
+                            <p class="error">应该
+                                {% for e in err.email %}
+                                {{ e }}{% if not forloop.last %}，{% endif %}
+                                {% endfor %}
+                            </p>
+                            {% endif %}
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control input-sm" id="password" name="password" placeholder="密码">
+                            {% if err.password %}
+                            <p class="error">应该
+                                {% for e in err.password %}
+                                {{ e }}{% if not forloop.last %}，{% endif %}
+                                {% endfor %}
+                            </p>
+                            {% endif %}
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control input-sm" id="password2" name="password2" placeholder="确认密码">
+                            {% if err.password2 %}
+                            <p class="error">应该
+                                {% for e in err.password2 %}
+                                {{ e }}{% if not forloop.last %}，{% endif %}
+                                {% endfor %}
+                            </p>
+                            {% endif %}
                         </div>
                         <button type="submit" class="btn btn-default btn-sm">开启真实之旅</button>
                     </form>
@@ -43,5 +75,5 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static "js/signup.js" %}"></script>
+<!--script src="{% static "js/signup.js" %}"></script-->
 {% endblock %}
