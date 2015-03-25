@@ -47,9 +47,12 @@
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+            {% if user.is_authenticated %}
             {% block bowl_nav %}<li><a href="/account/bowl/">碗里</a></li>{% endblock %}
+            {% else %}
             {% block signin_nav %}<li><a href="/account/signin/">登录</a></li>{% endblock %}
             {% block signup_nav %}<li><a href="/account/signup/">注册</a></li>{% endblock %}
+            {% endif %}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->

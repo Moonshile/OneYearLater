@@ -26,41 +26,25 @@
                         <div class="form-group">
                             <input type="text" class="form-control input-sm" id="username" name="username" placeholder="用户名">
                             {% if err.username %}
-                            <p class="error">应该
-                                {% for e in err.username %}
-                                {{ e }}{% if not forloop.last %}，{% endif %}
-                                {% endfor %}
-                            </p>
+                            <p class="error">{{ err.username|join:'，' }}</p>
                             {% endif %}
                         </div>
                         <div class="form-group">
                             <input type="email" class="form-control input-sm" id="email" name="email" placeholder="邮箱">
                             {% if err.email %}
-                            <p class="error">应该
-                                {% for e in err.email %}
-                                {{ e }}{% if not forloop.last %}，{% endif %}
-                                {% endfor %}
-                            </p>
+                            <p class="error">{{ err.email|join:'，' }}</p>
                             {% endif %}
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control input-sm" id="password" name="password" placeholder="密码">
                             {% if err.password %}
-                            <p class="error">应该
-                                {% for e in err.password %}
-                                {{ e }}{% if not forloop.last %}，{% endif %}
-                                {% endfor %}
-                            </p>
+                            <p class="error">{{ err.password|join:'，' }}</p>
                             {% endif %}
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control input-sm" id="password2" name="password2" placeholder="确认密码">
                             {% if err.password2 %}
-                            <p class="error">应该
-                                {% for e in err.password2 %}
-                                {{ e }}{% if not forloop.last %}，{% endif %}
-                                {% endfor %}
-                            </p>
+                            <p class="error">{{ err.password2|join:'，' }}</p>
                             {% endif %}
                         </div>
                         <button type="submit" class="btn btn-default btn-sm">开启真实之旅</button>
