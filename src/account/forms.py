@@ -1,5 +1,7 @@
 #coding=utf-8
 from django import forms
+from django.contrib.auth.models import User
+
 from models import InvitationCode
 
 import re
@@ -24,16 +26,26 @@ class SignupForm(forms.Form):
     password2 = forms.CharField(error_messages={
         'invalid': u'与第一次输入一致',
     })
+    """
     invitation_code = forms.CharField(required=False, error_messages={
         'invalid': u'是字母或者数字',
     })
+    """
 
     def clean_username(self):
         pattern = re.compile(r'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
         username = self.cleaned_data['username']
         if not pattern.match(username):
             raise forms.ValidationError((u'是字母、数字或者汉字'), code='content')
+        if User.objects.filter(username=username).count() > 0:
+            raise forms.ValidationError((u'用户名已经存在'), code='dup_username')
         return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).count() > 0:
+            raise forms.ValidationError((u'邮箱已经被占用'), code='dup_email')
+        return email
 
     def clean_password(self):
         pattern = re.compile(r'^[\x21-\x7e]+$')
@@ -48,13 +60,13 @@ class SignupForm(forms.Form):
         if password2 != password:
             raise forms.ValidationError((u'与第一次输入一致'), code='same')
         return password2
-
+    """
     def clean_invitation_code(self):
         invitation_code = self.cleaned_data['invitation_code']
         if InvitationCode.objects.filter(code=invitation_code).count() == 0:
             raise forms.ValidationError((u'邀请码错误'), code='exists')
         raise invitation_code
-
+    """
 class SigninForm(forms.Form):
     username = forms.CharField(error_messages={
         'invalid': u'用户名或者邮箱错误',
@@ -71,6 +83,10 @@ class SigninForm(forms.Form):
         username = self.cleaned_data['username']
         if not pattern.match(username) and not email.clean(username):
             raise forms.ValidationError((u'是字母、数字或者汉字，或者你的邮箱'), code='content')
+        """
+        if User.objects.filter(username=username).count == 0 and User.objects.filter(email=username) == 0:
+            raise forms.ValidationError((u'用户名或者邮箱不存在'), code='wrong_user')
+        """
         return username
 
     def clean_password(self):

@@ -18,10 +18,14 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
+        {% if new %}
+            <h2><span class="fa fa-sign-in"></span> 注册成功，请登录</h2>
+        {% else %}
             <h2><span class="fa fa-sign-in"></span> 登录<small>无力的挣扎后，我又来了，因为我对生活充满渴望</small></h2>
+        {% endif %}
             <div class="list main">
                 <div class="item">
-                    <form method="post" action=".">
+                    <form method="post" action=".?next={{ request.GET.next }}">
                         {% csrf_token %}
                         <div class="form-group">
                             <input type="text" class="form-control input-sm" id="username" name="username" placeholder="用户名或邮箱">

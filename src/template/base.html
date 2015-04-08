@@ -49,8 +49,14 @@
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
             {% block bowl_nav %}<li><a href="/account/bowl/">碗里</a></li>{% endblock %}
+            <li>
+              <form class="navbar-form" role="form" action="/account/signout/?next={{request.path}}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link">退出</button>
+              </form>
+            </li>
             {% else %}
-            {% block signin_nav %}<li><a href="/account/signin/">登录</a></li>{% endblock %}
+            {% block signin_nav %}<li><a href="/account/signin/?next={{request.path}}">登录</a></li>{% endblock %}
             {% block signup_nav %}<li><a href="/account/signup/">注册</a></li>{% endblock %}
             {% endif %}
           </ul>
