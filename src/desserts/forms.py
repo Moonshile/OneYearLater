@@ -14,10 +14,11 @@ class AddActivityForm(forms.Form):
         'max_length': max_len_msg % 20,
         'min_length': min_len_msg % 1,
         'invalid': u'是字母、数字或者汉字',
+        'required': u'必须填写内容',
     })
 
     def clean_text(self):
-        pattern = re.compile(r'^[\x21-\x7e\u4e00-\u9fa5]+$')
+        pattern = re.compile(r'^.+$')
         text = self.cleaned_data['text']
         if not pattern.match(text):
             raise forms.ValidationError((u'是字母、数字或者汉字'), code='content')
@@ -26,6 +27,7 @@ class AddActivityForm(forms.Form):
 class RmActivityForm(forms.Form):
     id = forms.IntegerField(error_messages={
         'invalid': u'是数字',
+        'required': u'必须填写内容',
     })
 
     def clean_id(self):
@@ -33,3 +35,6 @@ class RmActivityForm(forms.Form):
         if Activity.objects.filter(id=id).count() == 0:
             raise forms.ValidationError((u'活动不存在'), code='not_exist')
         return id
+
+class TodoForm(AddActivityForm):
+    pass

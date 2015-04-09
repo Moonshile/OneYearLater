@@ -18,17 +18,17 @@
 <div class="container">
     <h1>每一天，都可以有意义。</h1>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="list side">
                 <h2 class="title"><small>点击选择感兴趣的活动</small></h2>
                 <div class="kinds sour">
-                    <span id="s1" class="default">旅行</span>
-                    <span id="s2" class="default">做饭</span>
-                    <span id="s3" class="default">阅读</span>
-                    <span id="s4" class="default">绘画</span>
-                    <span id="s5" class="default">摄影</span>
+                    <span id="p1" class="default">旅行</span>
+                    <span id="p2" class="default">做饭</span>
+                    <span id="p3" class="default">阅读</span>
+                    <span id="p4" class="default">绘画</span>
+                    <span id="p5" class="default">摄影</span>
                     {% for a in activities %}
-                    <span id="{{ a.id }}" class="default">{{ a.text }}</span>
+                    <span id="u-{{ a.id }}" class="default">{{ a.text }}</span>
                     {% endfor %}
                 </div>
                 <div class="input-group input-group-sm">
@@ -39,7 +39,7 @@
                 </div>
                 <p class="error add"></p>
             </div><!-- /.list.main -->
-        </div><!-- /.col-sm-2 -->
+        </div><!-- /.col-sm-3 -->
         <div class="col-sm-6">
             <div class="list main">
                 <div class="item">
@@ -49,7 +49,7 @@
                     <button type="button" class="btn btn-default">随机选择全部</button>
                 </div><!-- /.item -->
                 {% if user.is_authenticated %}
-                <div class="item">
+                <div class="item hidden">
                     <h2 class="title"><small>你已经选择了<span class="label label-success">旅行</span>，记得把今天的收获分享给大家～</small></h2>
                     <div class="form-group">
                         <textarea type="text" class="form-control" rows="3"></textarea>

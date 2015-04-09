@@ -54,25 +54,48 @@ function addDessert() {
             } else if(data.success) {
                 $('#dessert').val('');
             } else {
-                errs = data.data;
-                $('.error.add').html()
+                errs = [];
+                for(var i in data.data) {
+                    if(typeof(data.data[i]) != 'function') {
+                        errs.push(data.data[i].join(','));
+                    }
+                }
+                $('.error.add').html(errs.join(','));
             }
         }
     });
 }
 
 function completeChoose(e) {
-    e.target.setAttribute('disabled', 'disabled');
-    var colors = ['danger', 'warning', 'success', 'info', 'primary'];
     var length = $('.kinds.dest span').length;
     if(length == 0) {
         var sour = $('.kinds.sour span');
         $('.kinds.dest').append(sour.clone());
         length = sour.length;
     }
-    $('.kinds.dest span').removeClass(colors.join(' ')).addClass('default');
-    $('.kinds span').unbind('click');
     var res = Math.floor(Math.random()*length);
-    $($('.kinds.dest span')[res]).addClass('success');
-    //TODO connect to server
+    $.ajax({
+        url: '/desserts/todo/',
+        type: 'POST',
+        data: {
+            'text': $($('.kinds.dest span')[res]).html(),
+        },
+        success: function(data) {
+            if(data.success && data.data) {
+                e.target.setAttribute('disabled', 'disabled');
+                var colors = ['danger', 'warning', 'success', 'info', 'primary'];
+                $('.kinds.dest span').removeClass(colors.join(' ')).addClass('default');
+                $('.kinds span').unbind('click');
+                $($('.kinds.dest span')[res]).addClass('success');
+            } else {
+                errs = [];
+                for(var i in data.data) {
+                    if(typeof(data.data[i]) != 'function') {
+                        errs.push(data.data[i].join(','));
+                    }
+                }
+                alert('错误：' + errs.join(','));
+            }
+        }
+    });
 }

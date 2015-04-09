@@ -8,7 +8,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 
-from forms import AddActivityForm, RmActivityForm
+from forms import AddActivityForm, RmActivityForm, TodoForm
 from models import Activity, Dessert
 
 def desserts(request):
@@ -47,6 +47,17 @@ def remove(request):
 @require_http_methods(['POST'])
 @login_required()
 def todo(request):
+    form = TodoForm(request.POST)
+    if form.is_valid():
+        cd = form.cleaned_data
+        a = Activity.objects.filter(text=cd['text']).all()
+        d = None
+        if len(a) > 0:
+            d = Dessert.objects.create(activity=a[0])
+        else:
+            a = Activity.objects.create(owner=request.user, text=cd['text'])
+            d = Dessert.objects.create(activity=a)
+        return JsonResponse({'success': True, 'data': {'id': d.id}})
     return JsonResponse({'success': False, 'data': form.errors})
 
 @require_http_methods(['POST'])

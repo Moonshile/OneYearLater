@@ -65,8 +65,8 @@ def signup(request):
                 email = cd['email'],
             )
             user.save()
-            account = Account(owner=user)
-            account.save()
+            a = Account(owner=user)
+            a.save()
             nxt = request.GET.get('next', '')
             args = '?new=true&next=' + nxt if nxt else '?new=true'
             return redirect(reverse(signin) + args)

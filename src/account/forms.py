@@ -14,17 +14,21 @@ class SignupForm(forms.Form):
         'max_length': max_len_msg % 10,
         'min_length': min_len_msg % 3,
         'invalid': u'是字母、数字或者汉字',
+        'required': u'必须填写内容',
     })
     email = forms.EmailField(error_messages={
         'invalid': u'合法的邮箱，如user@abc.com',
+        'required': u'必须填写内容',
     })
     password = forms.CharField(max_length=15, min_length=6, error_messages={
         'max_length': max_len_msg % 15,
         'min_length': min_len_msg % 6,
         'invalid': u'是半角字母、数字或者标点符号',
+        'required': u'必须填写内容',
     })
     password2 = forms.CharField(error_messages={
         'invalid': u'与第一次输入一致',
+        'required': u'必须填写内容',
     })
     """
     invitation_code = forms.CharField(required=False, error_messages={
@@ -33,7 +37,7 @@ class SignupForm(forms.Form):
     """
 
     def clean_username(self):
-        pattern = re.compile(r'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
+        pattern = re.compile(u'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
         username = self.cleaned_data['username']
         if not pattern.match(username):
             raise forms.ValidationError((u'是字母、数字或者汉字'), code='content')
@@ -70,15 +74,17 @@ class SignupForm(forms.Form):
 class SigninForm(forms.Form):
     username = forms.CharField(error_messages={
         'invalid': u'用户名或者邮箱错误',
+        'required': u'必须填写内容',
     })
     password = forms.CharField(max_length=15, min_length=6, error_messages={
         'max_length': max_len_msg % 15,
         'min_length': min_len_msg % 6,
         'invalid': u'是半角字母、数字或者标点符号',
+        'required': u'必须填写内容',
     })
 
     def clean_username(self):
-        pattern = re.compile(r'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
+        pattern = re.compile(u'^[a-zA-Z0-9_\u4e00-\u9fa5]+$')
         email = forms.EmailField(error_messages={'invalid': u'是字母、数字或者汉字，或者你的邮箱'})
         username = self.cleaned_data['username']
         if not pattern.match(username) and not email.clean(username):
