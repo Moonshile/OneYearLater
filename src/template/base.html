@@ -57,7 +57,7 @@
             </li>
             {% else %}
             {% block signin_nav %}<li><a href="/account/signin/?next={{request.path}}">登录</a></li>{% endblock %}
-            {% block signup_nav %}<li><a href="/account/signup/">注册</a></li>{% endblock %}
+            {% block signup_nav %}<li><a href="/account/signup/?next={{request.path}}">注册</a></li>{% endblock %}
             {% endif %}
           </ul>
         </div><!-- /.navbar-collapse -->

@@ -21,7 +21,7 @@
             <h2><span class="fa fa-user"></span> 注册<small>回望自己写就的历史，才觉得活得真实</small></h2>
             <div class="list main">
                 <div class="item">
-                    <form method="post" action=".">
+                    <form method="post" action=".{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
                          {% csrf_token %}
                         <div class="form-group">
                             <input type="text" class="form-control input-sm" id="username" name="username" placeholder="用户名">

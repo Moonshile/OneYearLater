@@ -12,32 +12,35 @@
 
 {% block main_wrap %}
 <div class="container">
+    <h1>每一天，都可以有意义。</h1>
     <div class="row">
-        <div class="col-sm-8">
-            <h1>每一天，<br>都可以有意义。</h1>
+        <div class="col-sm-2">
+            <div class="list side">
+                <h2 class="title"><small>点击选择感兴趣的活动</small></h2>
+                <div class="kinds sour">
+                    <span id="s1" class="default">旅行</span>
+                    <span id="s2" class="default">做饭</span>
+                    <span id="s3" class="default">阅读</span>
+                    <span id="s4" class="default">绘画</span>
+                    <span id="s5" class="default">摄影</span>
+                </div>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" id="dessert" name="dessert" placeholder="自定义">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default add-dessert">新增</button>
+                    </span>
+                </div>
+            </div><!-- /.list.main -->
+        </div><!-- /.col-sm-2 -->
+        <div class="col-sm-6">
             <div class="list main">
-                <div class="item">
-                    <h2 class="title"><small>点击选择感兴趣的活动</small></h2>
-                    <div class="kinds sour">
-                        <span id="s1" class="default">旅行</span>
-                        <span id="s2" class="default">做饭</span>
-                        <span id="s3" class="default">阅读</span>
-                        <span id="s4" class="default">绘画</span>
-                        <span id="s5" class="default">摄影</span>
-                    </div>
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" id="dessert" name="dessert" placeholder="自定义">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default add-dessert">添加</button>
-                        </span>
-                    </div>
-                </div><!-- /.item -->
                 <div class="item">
                     <h2 class="title"><small>下边是你的备选活动，点击去掉不想要的</small></h2>
                     <div class="kinds dest">
                     </div>
                     <button type="button" class="btn btn-default">随机选择全部</button>
                 </div><!-- /.item -->
+                {% if user.is_authenticated %}
                 <div class="item">
                     <h2 class="title"><small>你已经选择了<span class="label label-success">旅行</span>，记得把今天的收获分享给大家～</small></h2>
                     <div class="form-group">
@@ -48,10 +51,9 @@
                     </div>
                     <button type="button" class="btn btn-default">发表</button>
                 </div><!-- /.item -->
+                {% endif %}
             </div><!-- /.list.main -->
-        </div><!-- /.col-sm-8 -->
-        <div class="col-sm-4">
-        </div><!-- /.col-sm-4 -->
+        </div><!-- /.col-sm-6 -->
     </div><!-- /.row -->
 </div><!-- /.container -->
 {% endblock %}

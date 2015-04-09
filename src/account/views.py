@@ -29,6 +29,8 @@ def signout(request):
 
 @ensure_csrf_cookie
 def signin(request):
+    if request.user.is_authenticated():
+        return redirect(reverse(bowl))
     if request.method == 'POST':
         form = SigninForm(request.POST)
         err = None
@@ -44,6 +46,7 @@ def signin(request):
             if user is not None and user.is_active:
                 request.session.set_expiry(None)
                 auth.login(request, user)
+                print request.GET.get('next', reverse(bowl))
                 return redirect(request.GET.get('next', reverse(bowl)))
             err = {'total': [u'用户名或密码错误']}
         else:
@@ -55,6 +58,8 @@ def signin(request):
 
 @ensure_csrf_cookie
 def signup(request):
+    if request.user.is_authenticated():
+        return redirect(reverse(bowl))
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
