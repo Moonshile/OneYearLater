@@ -62,6 +62,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
 )
 
+LOGIN_URL = '/account/signin/'
+
 ROOT_URLCONF = 'forever.urls'
 
 WSGI_APPLICATION = 'forever.wsgi.application'
@@ -107,6 +109,8 @@ DEFAULT_CHARSET = 'utf-8'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/forever/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/var/www/forever/media/'
 STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
         )

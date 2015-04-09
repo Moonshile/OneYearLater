@@ -48,7 +48,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-            {% block bowl_nav %}<li><a href="/account/bowl/">碗里</a></li>{% endblock %}
+            {% block bowl_nav %}<li><a href="/desserts/bowl/">碗里</a></li>{% endblock %}
             <li>
               <form class="navbar-form" role="form" action="/account/signout/?next={{request.path}}" method="post">
                 {% csrf_token %}

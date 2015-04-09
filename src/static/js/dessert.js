@@ -36,13 +36,29 @@ function btnText() {
 }
 
 function addDessert() {
-    // TODO check input and connect to server
-    var span = document.createElement('span');
-    span.setAttribute('class', 'default');
-    span.setAttribute('id', 'ids');//todo
-    span.innerHTML = $('#dessert').val();
-    $(span).click(choose);
-    $('.kinds.sour').append(span);
+    $.ajax({
+        url: '/desserts/add/',
+        type: 'POST',
+        data: {
+            'text': $('#dessert').val(),
+        },
+        success: function(data) {
+            if(data.success && data.data) {
+                var span = document.createElement('span');
+                span.setAttribute('class', 'default');
+                span.setAttribute('id', data.data.id);//todo
+                span.innerHTML = $('#dessert').val();
+                $(span).click(choose);
+                $('.kinds.sour').append(span);
+                $('#dessert').val('');
+            } else if(data.success) {
+                $('#dessert').val('');
+            } else {
+                errs = data.data;
+                $('.error.add').html()
+            }
+        }
+    });
 }
 
 function completeChoose(e) {

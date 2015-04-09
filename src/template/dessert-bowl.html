@@ -10,6 +10,10 @@
 <link href="{% static "css/dessert.css" %}" rel="stylesheet">
 {% endblock %}
 
+{% block bowl_nav %}
+<li class="active"><a href="#">碗里</a></li>
+{% endblock %}
+
 {% block main_wrap %}
 <div class="container">
     <h1>每一天，都可以有意义。</h1>
@@ -23,6 +27,9 @@
                     <span id="s3" class="default">阅读</span>
                     <span id="s4" class="default">绘画</span>
                     <span id="s5" class="default">摄影</span>
+                    {% for a in activities %}
+                    <span id="{{ a.id }}" class="default">{{ a.text }}</span>
+                    {% endfor %}
                 </div>
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" id="dessert" name="dessert" placeholder="自定义">
@@ -30,6 +37,7 @@
                         <button type="button" class="btn btn-default add-dessert">新增</button>
                     </span>
                 </div>
+                <p class="error add"></p>
             </div><!-- /.list.main -->
         </div><!-- /.col-sm-2 -->
         <div class="col-sm-6">

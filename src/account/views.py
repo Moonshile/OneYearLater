@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
 
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -12,14 +13,9 @@ from django.contrib.auth.models import User
 from models import Account
 from forms import SignupForm, SigninForm
 
+@login_required()
 def account(request):
-    return render_to_response('bowl.html', RequestContext(request))
-
-def bowl(request):
-    return render_to_response('bowl.html', RequestContext(request))
-
-def dessert(request):
-    return render_to_response('dessert.html', RequestContext(request))
+    return render_to_response('dish-bowl.html', RequestContext(request))
 
 @ensure_csrf_cookie
 @require_http_methods(['POST'])
@@ -30,7 +26,7 @@ def signout(request):
 @ensure_csrf_cookie
 def signin(request):
     if request.user.is_authenticated():
-        return redirect(reverse(bowl))
+        return redirect(reverse(account))
     if request.method == 'POST':
         form = SigninForm(request.POST)
         err = None
@@ -46,8 +42,7 @@ def signin(request):
             if user is not None and user.is_active:
                 request.session.set_expiry(None)
                 auth.login(request, user)
-                print request.GET.get('next', reverse(bowl))
-                return redirect(request.GET.get('next', reverse(bowl)))
+                return redirect(request.GET.get('next', reverse(account)))
             err = {'total': [u'用户名或密码错误']}
         else:
             err = form.errors
@@ -59,7 +54,7 @@ def signin(request):
 @ensure_csrf_cookie
 def signup(request):
     if request.user.is_authenticated():
-        return redirect(reverse(bowl))
+        return redirect(reverse(account))
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
